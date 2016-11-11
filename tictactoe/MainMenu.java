@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package tictactoeproject;
+package tictactoe;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -17,7 +17,7 @@ import javafx.stage.Stage;
  *
  * @author CarlosPerez
  */
-public class Tictactoeproject extends Application {
+public class MainMenu extends Application {
     
     @Override
     public void start(Stage primaryStage) {
