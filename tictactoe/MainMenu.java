@@ -19,15 +19,18 @@ import javafx.stage.Stage;
  */
 public class MainMenu extends Application {
     
+    //Scene boardScene;
+    
     @Override
     public void start(Stage primaryStage) {
         Button btn = new Button();
-        btn.setText("Say 'Hello World'");
+        btn.setText("Go to Board");
         btn.setOnAction(new EventHandler<ActionEvent>() {
             
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
+                int winner = Board.display();
+                System.out.println(winner + " returned");
             }
         });
         
@@ -48,4 +51,8 @@ public class MainMenu extends Application {
         launch(args);
     }
     
+    public void initializeBoardScene()
+    {
+        
+    }
 }
