@@ -31,7 +31,7 @@ public class Board{
     public static final int NUMBER_OF_SCORES = 2 * NUMBER_OF_ROWS + 2;
     private static byte currentTurn;
     private static byte totalNumberOfTurns;
-    private static int [] scores;
+    private static int [][] scores; //0 forward 1 backward
     private static byte [][] squares;
     private static Button [][] gridButtons;
     private static Stage window;
@@ -54,21 +54,22 @@ public class Board{
     private static Scene scene;
     private static Button justClickedBtn;
     
+    //crazy constant
+    //private static final float THIRD = (1.0f / 3.0f);
+    
     public static int display()
     {
         currentTurn = 1;
         totalNumberOfTurns = 0;
-        scores = new int[NUMBER_OF_SCORES];
+        scores = new int[2][NUMBER_OF_SCORES];
         squares = new byte[NUMBER_OF_ROWS][NUMBER_OF_COLUMNS]; //java arrays are row major
         gridButtons = new Button[NUMBER_OF_ROWS][NUMBER_OF_COLUMNS];
         
         
-        //initialize the arrays
-        for (int i = 0; i < NUMBER_OF_SCORES; i++)
-        {
-            scores[i] = 0;
-        }
+        //initialize the score array
+        initializeScoresArray();
         
+        //initialize squares and button arrays
         for (int i = 0; i < NUMBER_OF_ROWS; i++)
         {
             for (int j = 0; j < NUMBER_OF_COLUMNS; j++)
@@ -186,11 +187,13 @@ public class Board{
             
             if (checkForDraw())
             {
-                System.out.println("Game ends in a draw");
+                System.out.println("Game ends in a draw.");
+                ConfirmBox.display("Game Over", "Game ends in a draw.");
             }
-            else if (checkForWin())
+            else if (checkForWin(row, col))
             {
                 System.out.println("Player " + currentTurn + " wins");
+                ConfirmBox.display("Game Over", "Player " + currentTurn + " wins");
             }
             else
             {
@@ -215,13 +218,17 @@ public class Board{
             return false;
     }
     
-    //AS OF 11/13/2016 THIS DOES NOT WORK ON ALL CASES
-    private static boolean checkForWin()
+    private static boolean checkForWin(int row, int col)
     {
-        for (int i = 0; i < NUMBER_OF_SCORES; i++)
+        for (int i = 0; i < 2; i++)
         {
-            if (Math.abs(scores[i]) == 4)
-                return true;
+            for (int j = 0; j < NUMBER_OF_SCORES; j++)
+            {  
+                if (Math.abs(scores[i][j]) == 4)
+                {
+                    return true;
+                }
+            }
         }
         
         return false;
@@ -236,12 +243,73 @@ public class Board{
             score = 1;
         else
             score = -1;
-
-        scores[row] += score;
-        scores[NUMBER_OF_ROWS + col] += score;
-        if (row == col)
-            scores[2 * NUMBER_OF_ROWS] += score;
-        if (NUMBER_OF_ROWS - 1 - col == row)
-            scores[2 * NUMBER_OF_ROWS + 1] += score;
+        
+        
+        switch (col) {
+            case NUMBER_OF_ROWS - 1:
+                scores[1][row] += score;
+                break;
+            case 0:
+                scores[0][row] += score;
+                break;
+            default:
+                scores[0][row] += score;
+                scores[1][row] += score;
+                break;
+        }
+        
+        
+        switch (row) {
+            case NUMBER_OF_ROWS - 1:
+                scores[1][NUMBER_OF_ROWS + col] += score;
+                break;
+            case 0:
+                scores[0][NUMBER_OF_ROWS + col] += score;
+                break;
+            default:
+                scores[0][NUMBER_OF_ROWS + col] += score;
+                scores[1][NUMBER_OF_ROWS + col] += score;
+                break;
+        }
+        
+        if ((row == NUMBER_OF_ROWS - 1) && (col == NUMBER_OF_ROWS - 1))
+        {
+            if (row == col)
+                scores[1][2 * NUMBER_OF_ROWS] += score;
+            if (NUMBER_OF_ROWS - 1 - col == row)
+                scores[1][2 * NUMBER_OF_ROWS + 1] += score;
+        }
+        else if ((row == 0) && (col == 0))
+        {
+            if (row == col)
+                scores[0][2 * NUMBER_OF_ROWS] += score;
+            if (NUMBER_OF_ROWS - 1 - col == row)
+                scores[0][2 * NUMBER_OF_ROWS + 1] += score;
+        }
+        else
+        {
+            if (row == col)
+            {
+                scores[0][2 * NUMBER_OF_ROWS] += score;
+                scores[1][2 * NUMBER_OF_ROWS] += score;
+            }
+                
+            if (NUMBER_OF_ROWS - 1 - col == row)
+            {
+                scores[0][2 * NUMBER_OF_ROWS + 1] += score;
+                scores[1][2 * NUMBER_OF_ROWS + 1] += score;
+            }
+        }
     }
+    
+    private static void initializeScoresArray()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            for (int j = 0; j < NUMBER_OF_SCORES; j++)
+            {
+                scores[i][j] = 0;
+            } 
+        }
+    }    
 }
