@@ -234,4 +234,8 @@ public class MainMenu extends Application {
         launch(args);
     }
     
+    public void initializeBoardScene()
+    {
+        
+    }
 }
