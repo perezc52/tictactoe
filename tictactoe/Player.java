@@ -5,20 +5,21 @@
  */
 
 package tictactoe;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author usha
  */
-public class Player {
+public class Player implements Serializable {
     /**
      * @param args the command line arguments
      */
     
-    String username;
-    int numberOfLosses = 0;
-    int numberOfWins = 0;
+    private String username;
+    private int numberOfLosses;
+    private int numberOfWins;
   //  image visualRepresentation;
     
     
@@ -27,26 +28,34 @@ public class Player {
     
     /*default constructor*/
     public Player (){
-    
+        
     }
     
     /* para arg: username of the current player */
-    public Player(String userName, int winDefault, int lossDefault){
+    public Player(String userName, int winDefault, int lossDefault)
+    {
     
     /*class global variable access the current username value*/
     this.username = userName;
     }
     
+    public Player(String username)
+    {
+        this.username = username;
+        this.numberOfWins = 0;
+        this.numberOfLosses = 0;
+    }
     
-   String getUserName ( Player userName ){
+    
+    public String getUserName ( ){
       
-    username = userName.toString();
+    //username = userName.toString();
     return username;
     }
     
     
     /* get number of total wins for the player*/
-    int getNumberOfWin(Object player){
+    public int getNumberOfWin(Object player){
        /*access player class needed*/
         player.getClass();
         
@@ -56,7 +65,7 @@ public class Player {
                 
     }
     
-    int getNumberOfLoss(Object player){
+    public int getNumberOfLoss(Object player){
     /*access player class needed*/
         player.getClass();
         
@@ -78,7 +87,7 @@ public class Player {
     
      
     /*increment by one when won */
-    void incrementWin(Object player, int numberOfWins ){
+    public void incrementWin(Object player, int numberOfWins ){
     
         this.getNumberOfWin(player);
         numberOfWins++;
@@ -86,7 +95,7 @@ public class Player {
     }
     
     /*increment by one when loss*/
-    void incrementLoss(Object player,int numberOfLoss){
+    public void incrementLoss(Object player,int numberOfLoss){
         
         this.getNumberOfLoss(player);
         numberOfLoss++;
