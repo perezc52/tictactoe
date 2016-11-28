@@ -5,20 +5,21 @@
  */
 
 package tictactoe;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author usha
  */
-public class Player {
+public class Player implements Serializable {
     /**
      * @param args the command line arguments
      */
     
-    String username;
-    int numberOfLosses = 0;
-    int numberOfWins = 0;
+    private String username;
+    private int numberOfLosses;
+    private int numberOfWins;
   //  image visualRepresentation;
     
     
@@ -27,28 +28,41 @@ public class Player {
     
     /*default constructor*/
     public Player (){
-    
+        this.username = "mufasa";
+        this.numberOfLosses = 0;
+        this.numberOfWins = 0;
+        
     }
     
     /* para arg: username of the current player */
-    public Player(String userName, int winDefault, int lossDefault){
+    public Player(String userName, int winDefault, int lossDefault)
+    {
     
     /*class global variable access the current username value*/
     this.username = userName;
+    this.numberOfWins = winDefault;
+    this.numberOfLosses = lossDefault;
+    }
+    
+    public Player(String username)
+    {
+        this.username = username;
+        this.numberOfWins = 0;
+        this.numberOfLosses = 0;
     }
     
     
-   String getUserName ( Player userName ){
+    public String getUserName ( ){
       
-    username = userName.toString();
+    //username = userName.toString();
     return username;
     }
     
     
     /* get number of total wins for the player*/
-    int getNumberOfWin(Object player){
-       /*access player class needed*/
-        player.getClass();
+    public int getNumberOfWin(){
+//       /*access player class needed*/
+//        player.getClass();
         
         /* return player's value for number of wins*/
         return
@@ -56,9 +70,9 @@ public class Player {
                 
     }
     
-    int getNumberOfLoss(Object player){
-    /*access player class needed*/
-        player.getClass();
+    public int getNumberOfLoss(){
+//    /*access player class needed*/
+//        player.getClass();
         
         /* return player's value for number of Losses*/
         return
@@ -67,33 +81,37 @@ public class Player {
     }
     
   
-    int getWinLossRatio(Object player){
-    int winTotal= this.getNumberOfWin(player);
-    int lossTotal= this.getNumberOfLoss(player);
+    double getWinLossRatio(){
     
-    int winLossRatio = winTotal/lossTotal;
+    
+    double winLossRatio = numberOfWins/numberOfLosses;
     return
          winLossRatio;   
     }
     
      
     /*increment by one when won */
-    void incrementWin(Object player, int numberOfWins ){
+    public void incrementWin(){
     
-        this.getNumberOfWin(player);
         numberOfWins++;
     
     }
     
     /*increment by one when loss*/
-    void incrementLoss(Object player,int numberOfLoss){
+    public void incrementLoss(){
         
-        this.getNumberOfLoss(player);
-        numberOfLoss++;
+        numberOfLosses++;
         
     }
     
   //  void setVisualRepresentation(){}
     
   //  image getVisialRepresenation(){}   
+
+    /**
+     * @param username the username to set
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }
