@@ -28,6 +28,9 @@ public class Player implements Serializable {
     
     /*default constructor*/
     public Player (){
+        this.username = "mufasa";
+        this.numberOfLosses = 0;
+        this.numberOfWins = 0;
         
     }
     
@@ -37,6 +40,8 @@ public class Player implements Serializable {
     
     /*class global variable access the current username value*/
     this.username = userName;
+    this.numberOfWins = winDefault;
+    this.numberOfLosses = lossDefault;
     }
     
     public Player(String username)
@@ -55,9 +60,9 @@ public class Player implements Serializable {
     
     
     /* get number of total wins for the player*/
-    public int getNumberOfWin(Object player){
-       /*access player class needed*/
-        player.getClass();
+    public int getNumberOfWin(){
+//       /*access player class needed*/
+//        player.getClass();
         
         /* return player's value for number of wins*/
         return
@@ -65,9 +70,9 @@ public class Player implements Serializable {
                 
     }
     
-    public int getNumberOfLoss(Object player){
-    /*access player class needed*/
-        player.getClass();
+    public int getNumberOfLoss(){
+//    /*access player class needed*/
+//        player.getClass();
         
         /* return player's value for number of Losses*/
         return
@@ -76,33 +81,37 @@ public class Player implements Serializable {
     }
     
   
-    int getWinLossRatio(Object player){
-    int winTotal= this.getNumberOfWin(player);
-    int lossTotal= this.getNumberOfLoss(player);
+    double getWinLossRatio(){
     
-    int winLossRatio = winTotal/lossTotal;
+    
+    double winLossRatio = numberOfWins/numberOfLosses;
     return
          winLossRatio;   
     }
     
      
     /*increment by one when won */
-    public void incrementWin(Object player, int numberOfWins ){
+    public void incrementWin(){
     
-        this.getNumberOfWin(player);
         numberOfWins++;
     
     }
     
     /*increment by one when loss*/
-    public void incrementLoss(Object player,int numberOfLoss){
+    public void incrementLoss(){
         
-        this.getNumberOfLoss(player);
-        numberOfLoss++;
+        numberOfLosses++;
         
     }
     
   //  void setVisualRepresentation(){}
     
   //  image getVisialRepresenation(){}   
+
+    /**
+     * @param username the username to set
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }

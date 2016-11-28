@@ -87,43 +87,7 @@ public class MainMenu extends Application {
         }
         
         //deserialize a playerMap from computer or create it if it does not exist
-        playerMap = null;
-        try
-        {
-            FileInputStream fileIn = new FileInputStream("player_map.es");
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            playerMap = (HashMap<String, Player>)in.readObject();
-            in.close();
-            fileIn.close();
-            
-        } 
-        catch (FileNotFoundException ex) 
-        {
-            playerMap = new HashMap<>();
-            try 
-            {
-                FileOutputStream fileOut = new FileOutputStream("player_map.es");
-                ObjectOutputStream out = new ObjectOutputStream(fileOut);
-                out.writeObject(playerMap);
-                out.close();
-                fileOut.close();
-                ConfirmBox.display("First Time?", "A necessary file was created in your directory");
-            } 
-            catch (FileNotFoundException ex1) 
-            {
-                Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex1);
-            } catch (IOException ex1) {
-                Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-        } 
-        catch (IOException ex) 
-        {
-            System.err.println(ex.getMessage());
-        } 
-        catch (ClassNotFoundException ex) 
-        {
-            System.err.println(ex.getMessage());
-        }
+        deserializePlayerMap();
         
         //window.setTitle("Game");
         //window.setMinWidth(500);
@@ -134,9 +98,9 @@ public class MainMenu extends Application {
         window = primaryStage;
 
         initializeMainMenuScene();
-        initializeHistoryScene();
+        //initializeHistoryScene();
         initializeDifficultyScene();
-        initializeBoardScene();
+        //initializeBoardScene();
         }
     
     
@@ -206,7 +170,7 @@ public class MainMenu extends Application {
         }
         
         //initialize label
-        turnLabel = new Label("It is " + players[currentTurn - 1] + "'s turn");
+        turnLabel = new Label("It is " + players[currentTurn - 1].getUserName() + "'s turn");
         turnLabel.setPadding(new Insets(10,10,10,10));
         //turnLabel.setAlignment(Pos.CENTER);
 
@@ -296,6 +260,25 @@ public class MainMenu extends Application {
             {
                 System.out.println("Player " + players[currentTurn - 1].getUserName() + " wins");
                 ConfirmBox.display("Game Over", "Player " + players[currentTurn - 1].getUserName() + " wins");
+                if (currentTurn == 1)
+                {
+                    players[currentTurn - 1].incrementWin();
+                    players[currentTurn].incrementLoss();
+                    
+                    playerMap.put(players[currentTurn - 1].getUserName(), players[currentTurn - 1]);
+                    playerMap.put(players[currentTurn].getUserName(), players[currentTurn]);
+                    window.close();
+                }
+                else
+                {
+                    players[currentTurn - 1].incrementWin();
+                    players[currentTurn - 2].incrementLoss();
+                    
+                    playerMap.put(players[currentTurn - 1].getUserName(), players[currentTurn - 1]);
+                    playerMap.put(players[currentTurn - 2].getUserName(), players[currentTurn - 2]);
+                    window.close();
+                }
+                
             }
             else
             {
@@ -447,7 +430,10 @@ public class MainMenu extends Application {
         window.show();
         
         //Main Menu Buttons
-        viewHistory.setOnAction(e -> OpenHistoryMenu(window, historyScene));
+        viewHistory.setOnAction(e -> {
+            initializeHistoryScene();
+            OpenHistoryMenu(window, historyScene);
+        });
         onePlayer.setOnAction(e -> window.setScene(poScene));
         twoPlayers.setOnAction(e -> 
         {
@@ -460,7 +446,7 @@ public class MainMenu extends Application {
             System.out.printf("%s", playerMap.keySet());
             
             serializePlayerMap();
-            
+            initializeBoardScene();
             window.setScene(boardScene);
         });
         quit.setOnAction(e -> window.close());
@@ -469,6 +455,8 @@ public class MainMenu extends Application {
     
     public void initializeHistoryScene()
     {
+        //deserializePlayerMap();
+        
         //History Scene
         
         TableView<Player> table;
@@ -485,12 +473,21 @@ public class MainMenu extends Application {
         lossColumn.setMinWidth(100);
         lossColumn.setCellValueFactory(new PropertyValueFactory<>("numberOfLosses"));
         
-        TableColumn<Player, Double> ratioColumn = new TableColumn<>("Win/Loss Ratio");
-        ratioColumn.setMinWidth(120);
-        ratioColumn.setCellValueFactory(new PropertyValueFactory<>("getWinLossRatio()"));
+//        TableColumn<Player, Double> ratioColumn = new TableColumn<>("Win/Loss Ratio");
+//        ratioColumn.setMinWidth(120);
+//        ratioColumn.setCellValueFactory(new PropertyValueFactory<>("getWinLossRatio()"));
         
         table = new TableView<>();
-        table.getColumns().addAll(nameColumn, winsColumn, lossColumn, ratioColumn);
+        
+        //populate table
+//        ObservableList<Player> pList = FXCollections.observableArrayList();
+//        pList.addAll(playerMap.values());
+//        //pList.add(playerMap.get("jojo"));
+        //System.out.printf("%s", playerMap.get("jojo"));
+        table.getItems().addAll(playerMap.values());
+        
+        //table.getColumns().addAll(nameColumn, winsColumn, lossColumn, ratioColumn);
+        table.getColumns().addAll(nameColumn, winsColumn, lossColumn);
         
         Button clearHistory, historyToMenu;
         clearHistory = new Button("Clear History");
@@ -539,9 +536,9 @@ public class MainMenu extends Application {
         } 
         catch (FileNotFoundException ex1) 
         {
-            Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex1);
+            System.err.println(ex1.getMessage());
         } catch (IOException ex1) {
-            Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex1);
+            System.err.println(ex1.getMessage());
         }
     }
     
@@ -572,9 +569,9 @@ public class MainMenu extends Application {
             } 
             catch (FileNotFoundException ex1) 
             {
-                Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex1);
+                System.err.println(ex1.getMessage());
             } catch (IOException ex1) {
-                Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex1);
+                System.err.println(ex1.getMessage());
             }
         } 
         catch (IOException ex) 
