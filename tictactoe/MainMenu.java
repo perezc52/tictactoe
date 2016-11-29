@@ -29,8 +29,8 @@ import javafx.stage.Stage;
 public class MainMenu extends Application {
     
     private Player [] players;
-    private RegisterMenu r1;
-    private DifficultyMenu d1;
+    //private RegisterMenu r1;
+    //private DifficultyMenu d1;
     //private LoginMenu l1;
     //private HistoryMenu h1;
     
