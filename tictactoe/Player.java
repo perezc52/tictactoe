@@ -20,6 +20,8 @@ public class Player implements Serializable {
     private String username;
     private int numberOfLosses;
     private int numberOfWins;
+    private double winLossRatio;
+    //private long serialVersionUID
   //  image visualRepresentation;
     
     
@@ -31,6 +33,7 @@ public class Player implements Serializable {
         this.username = "mufasa";
         this.numberOfLosses = 0;
         this.numberOfWins = 0;
+        this.winLossRatio = 0;
         
     }
     
@@ -42,6 +45,7 @@ public class Player implements Serializable {
     this.username = userName;
     this.numberOfWins = winDefault;
     this.numberOfLosses = lossDefault;
+    this.winLossRatio = 0;
     }
     
     public Player(String username)
@@ -49,10 +53,11 @@ public class Player implements Serializable {
         this.username = username;
         this.numberOfWins = 0;
         this.numberOfLosses = 0;
+        this.winLossRatio = 0;
     }
     
     
-    public String getUserName ( ){
+    public String getUsername ( ){
       
     //username = userName.toString();
     return username;
@@ -60,7 +65,7 @@ public class Player implements Serializable {
     
     
     /* get number of total wins for the player*/
-    public int getNumberOfWin(){
+    public int getNumberOfWins(){
 //       /*access player class needed*/
 //        player.getClass();
         
@@ -70,7 +75,7 @@ public class Player implements Serializable {
                 
     }
     
-    public int getNumberOfLoss(){
+    public int getNumberOfLosses(){
 //    /*access player class needed*/
 //        player.getClass();
         
@@ -81,12 +86,9 @@ public class Player implements Serializable {
     }
     
   
-    double getWinLossRatio(){
+    public double getWinLossRatio(){
     
-    
-    double winLossRatio = numberOfWins/numberOfLosses;
-    return
-         winLossRatio;   
+        return winLossRatio;   
     }
     
      
@@ -94,6 +96,7 @@ public class Player implements Serializable {
     public void incrementWin(){
     
         numberOfWins++;
+        setWinLossRatio();
     
     }
     
@@ -101,6 +104,7 @@ public class Player implements Serializable {
     public void incrementLoss(){
         
         numberOfLosses++;
+        setWinLossRatio();
         
     }
     
@@ -113,5 +117,19 @@ public class Player implements Serializable {
      */
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    /**
+     * @param winLossRatio the winLossRatio to set
+     */
+    public void setWinLossRatio() {
+        try
+        {
+            this.winLossRatio = numberOfWins / numberOfLosses;
+        }
+        catch (ArithmeticException ex)
+        {
+            this.winLossRatio = numberOfWins;
+        }
     }
 }
