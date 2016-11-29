@@ -29,8 +29,8 @@ import javafx.stage.Stage;
 public class MainMenu extends Application {
     
     private Player [] players;
-    private RegisterMenu r1;
-    private DifficultyMenu d1;
+    //private RegisterMenu r1;
+    //private DifficultyMenu d1;
     //private LoginMenu l1;
     //private HistoryMenu h1;
     
@@ -67,27 +67,29 @@ public class MainMenu extends Application {
     {
         players = new Player[2];
         
-        currentTurn = 1;
-        totalNumberOfTurns = 0;
+//        currentTurn = 1;
+//        totalNumberOfTurns = 0;
         scores = new int[2][NUMBER_OF_SCORES];
         squares = new byte[NUMBER_OF_ROWS][NUMBER_OF_COLUMNS]; //java arrays are row major
         gridButtons = new Button[NUMBER_OF_ROWS][NUMBER_OF_COLUMNS];
         
-        //initialize the score array
-        initializeScoresArray();
         
-        //initialize squares and button arrays
-        for (int i = 0; i < NUMBER_OF_ROWS; i++)
-        {
-            for (int j = 0; j < NUMBER_OF_COLUMNS; j++)
-            {
-                squares[i][j] = 0;
-                gridButtons[i][j] = new Button("R" + Integer.toString(i) + "C" + Integer.toString(j));
-            }
-        }
+//        //initialize the score array
+//        initializeScoresArray();
+//        
+//        //initialize squares and button arrays
+//        for (int i = 0; i < NUMBER_OF_ROWS; i++)
+//        {
+//            for (int j = 0; j < NUMBER_OF_COLUMNS; j++)
+//            {
+//                squares[i][j] = 0;
+//                gridButtons[i][j] = new Button("R" + Integer.toString(i) + "C" + Integer.toString(j));
+//            }
+//        }
         
         //deserialize a playerMap from computer or create it if it does not exist
         deserializePlayerMap();
+        //System.out.println(playerMap.get("jojo").getNumberOfWins());
         
         //window.setTitle("Game");
         //window.setMinWidth(500);
@@ -122,10 +124,11 @@ public class MainMenu extends Application {
         return pRegister;
     }
         
-    public void OpenHistoryMenu(Stage window, Scene historyScene) {
-        deserializePlayerMap();    
+    /*public void OpenHistoryMenu(Stage window, Scene historyScene) {
+        //deserializePlayerMap();    
+        initializeHist
         window.setScene(historyScene);
-    }
+    }*/
     
     
 
@@ -138,8 +141,35 @@ public class MainMenu extends Application {
         launch(args);
     }
     
+    private void initializeBoardVariables()
+    {
+        currentTurn = 1;
+        totalNumberOfTurns = 0;
+        
+        //initialize the score array
+        for (int i = 0; i < 2; i++)
+        {
+            for (int j = 0; j < NUMBER_OF_SCORES; j++)
+            {
+                scores[i][j] = 0;
+            } 
+        }
+        
+        //initialize squares and button arrays
+        for (int i = 0; i < NUMBER_OF_ROWS; i++)
+        {
+            for (int j = 0; j < NUMBER_OF_COLUMNS; j++)
+            {
+                squares[i][j] = 0;
+                gridButtons[i][j] = new Button("R" + Integer.toString(i) + "C" + Integer.toString(j));
+            }
+        }
+    }
+    
     public void initializeBoardScene()
     {
+        initializeBoardVariables();
+        
         //Buttons
         Button surrenderButton;
         Button mainMenuButton;
@@ -170,7 +200,7 @@ public class MainMenu extends Application {
         }
         
         //initialize label
-        turnLabel = new Label("It is " + players[currentTurn - 1].getUserName() + "'s turn");
+        turnLabel = new Label("It is " + players[currentTurn - 1].getUsername() + "'s turn");
         turnLabel.setPadding(new Insets(10,10,10,10));
         //turnLabel.setAlignment(Pos.CENTER);
 
@@ -215,7 +245,7 @@ public class MainMenu extends Application {
                 else
                     currentTurn = 1;
                 
-                window.close();
+                window.setScene(menuScene);
             }
         });
         
@@ -255,28 +285,30 @@ public class MainMenu extends Application {
             {
                 System.out.println("Game ends in a draw.");
                 ConfirmBox.display("Game Over", "Game ends in a draw.");
+                window.setScene(menuScene);
+
             }
             else if (checkForWin(row, col))
             {
-                System.out.println("Player " + players[currentTurn - 1].getUserName() + " wins");
-                ConfirmBox.display("Game Over", "Player " + players[currentTurn - 1].getUserName() + " wins");
+                System.out.println("Player " + players[currentTurn - 1].getUsername() + " wins");
+                ConfirmBox.display("Game Over", "Player " + players[currentTurn - 1].getUsername() + " wins");
                 if (currentTurn == 1)
                 {
                     players[currentTurn - 1].incrementWin();
                     players[currentTurn].incrementLoss();
                     
-                    playerMap.put(players[currentTurn - 1].getUserName(), players[currentTurn - 1]);
-                    playerMap.put(players[currentTurn].getUserName(), players[currentTurn]);
-                    window.close();
+                    playerMap.put(players[currentTurn - 1].getUsername(), players[currentTurn - 1]);
+                    playerMap.put(players[currentTurn].getUsername(), players[currentTurn]);
+                    window.setScene(menuScene);
                 }
                 else
                 {
                     players[currentTurn - 1].incrementWin();
                     players[currentTurn - 2].incrementLoss();
                     
-                    playerMap.put(players[currentTurn - 1].getUserName(), players[currentTurn - 1]);
-                    playerMap.put(players[currentTurn - 2].getUserName(), players[currentTurn - 2]);
-                    window.close();
+                    playerMap.put(players[currentTurn - 1].getUsername(), players[currentTurn - 1]);
+                    playerMap.put(players[currentTurn - 2].getUsername(), players[currentTurn - 2]);
+                    window.setScene(menuScene);
                 }
                 
             }
@@ -287,7 +319,7 @@ public class MainMenu extends Application {
                 else
                     currentTurn = 1;
                  
-                turnLabel.setText("It is " + players[currentTurn - 1].getUserName() + "'s turn");
+                turnLabel.setText("It is " + players[currentTurn - 1].getUsername() + "'s turn");
 
             }
         } 
@@ -386,17 +418,7 @@ public class MainMenu extends Application {
             }
         }
     }
-    
-    private void initializeScoresArray()
-    {
-        for (int i = 0; i < 2; i++)
-        {
-            for (int j = 0; j < NUMBER_OF_SCORES; j++)
-            {
-                scores[i][j] = 0;
-            } 
-        }
-    }    
+       
     
     public void initializeMainMenuScene()
     {
@@ -432,7 +454,8 @@ public class MainMenu extends Application {
         //Main Menu Buttons
         viewHistory.setOnAction(e -> {
             initializeHistoryScene();
-            OpenHistoryMenu(window, historyScene);
+            window.setScene(historyScene);
+            //OpenHistoryMenu(window, historyScene);
         });
         onePlayer.setOnAction(e -> window.setScene(poScene));
         twoPlayers.setOnAction(e -> 
@@ -440,16 +463,19 @@ public class MainMenu extends Application {
             players[0] = OptionsMenu.display(playerMap, 1);
             players[1] = OptionsMenu.display(playerMap, 2);
             
-            System.out.println("p1 " + players[0].getUserName());
-            System.out.println("p2 " + players[1].getUserName());
+            System.out.println("p1 " + players[0].getUsername());
+            System.out.println("p2 " + players[1].getUsername());
             
             System.out.printf("%s", playerMap.keySet());
             
-            serializePlayerMap();
+            //serializePlayerMap();
             initializeBoardScene();
             window.setScene(boardScene);
         });
-        quit.setOnAction(e -> window.close());
+        quit.setOnAction(e -> {
+            serializePlayerMap();
+            window.close();
+    });
     }
     
     
@@ -473,9 +499,9 @@ public class MainMenu extends Application {
         lossColumn.setMinWidth(100);
         lossColumn.setCellValueFactory(new PropertyValueFactory<>("numberOfLosses"));
         
-//        TableColumn<Player, Double> ratioColumn = new TableColumn<>("Win/Loss Ratio");
-//        ratioColumn.setMinWidth(120);
-//        ratioColumn.setCellValueFactory(new PropertyValueFactory<>("getWinLossRatio()"));
+        TableColumn<Player, Double> ratioColumn = new TableColumn<>("Win/Loss Ratio");
+        ratioColumn.setMinWidth(120);
+        ratioColumn.setCellValueFactory(new PropertyValueFactory<>("winLossRatio"));
         
         table = new TableView<>();
         
@@ -484,10 +510,11 @@ public class MainMenu extends Application {
 //        pList.addAll(playerMap.values());
 //        //pList.add(playerMap.get("jojo"));
         //System.out.printf("%s", playerMap.get("jojo"));
+        
         table.getItems().addAll(playerMap.values());
         
         //table.getColumns().addAll(nameColumn, winsColumn, lossColumn, ratioColumn);
-        table.getColumns().addAll(nameColumn, winsColumn, lossColumn);
+        table.getColumns().addAll(nameColumn, winsColumn, lossColumn, ratioColumn);
         
         Button clearHistory, historyToMenu;
         clearHistory = new Button("Clear History");
