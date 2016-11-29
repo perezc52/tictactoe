@@ -418,7 +418,21 @@ public class MainMenu extends Application {
             }
         }
     }
-       
+
+    public byte[][] getGameState()
+    {
+        byte [][] allSquares = new byte[NUMBER_OF_ROWS][NUMBER_OF_COLUMNS];
+        
+        for (int i = 0; i < NUMBER_OF_ROWS; i++)
+        {
+            for (int j = 0; j < NUMBER_OF_COLUMNS; j++)
+            {
+                allSquares[i][j] = squares[i][j];
+            }
+        }
+        
+        return allSquares;
+    }
     
     public void initializeMainMenuScene()
     {
