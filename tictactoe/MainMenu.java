@@ -245,7 +245,7 @@ public class MainMenu extends Application {
                 else
                     currentTurn = 1;
                 
-                window.close();
+                window.setScene(menuScene);
             }
         });
         
