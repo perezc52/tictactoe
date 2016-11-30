@@ -5,7 +5,9 @@
  */
 package tictactoe;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -62,7 +64,24 @@ public class OptionsMenu {
         //Player Option Buttons
         login.setOnAction(e -> window.setScene(loginScene));
         register.setOnAction(e -> window.setScene(registerScene));
-        guest.setOnAction(e -> System.out.println("Playing as Guest"));
+        guest.setOnAction(e -> {
+            int noOfGuests = 0;
+//            Set<String> pList = new ArrayList<>();
+//            pList = playerMap.keySet();
+            for (String x : playerMap.keySet())
+            {
+                if (x.contains("Guest"))
+                {
+                    noOfGuests++;
+                }
+            }
+            System.out.println("Playing as Guest");
+            ConfirmBox.display("Guest", "Playing as Guest " + noOfGuests);
+            playerToReturn = new Player("Guest " + noOfGuests);
+            playerMap.put(playerToReturn.getUsername(), playerToReturn);
+            window.close();
+            
+        });
         goBack.setOnAction(e -> window.close());
 
         poLayout.getChildren().addAll(playerNum, login, register, guest, goBack);

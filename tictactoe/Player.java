@@ -21,7 +21,8 @@ public class Player implements Serializable {
     private int numberOfLosses;
     private int numberOfWins;
     private double winLossRatio;
-    //private long serialVersionUID
+    //public static int guestNumber = 0;
+    private static final long serialVersionUID = 1L;
   //  image visualRepresentation;
     
     

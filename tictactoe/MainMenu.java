@@ -568,6 +568,14 @@ public class MainMenu extends Application {
         //History Menu Buttons
         historyToMenu.setOnAction(e -> window.setScene(menuScene));
         
+        clearHistory.setOnAction(e -> {
+            if (BinaryQuestionBox.display("Wait", "This will delete all player objects. Are you sure you wish to do this?") == true)
+            {
+                playerMap.clear();
+                playerMap.put("EasyPlayer", new EasyPlayer("EasyComputer"));
+            }
+                    });
+        
         HBox historyHBox = new HBox(260);
         VBox historyVBox = new VBox(10);
         
