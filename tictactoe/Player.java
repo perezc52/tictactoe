@@ -26,7 +26,7 @@ public class Player implements Serializable {
     
     
     /* created player object classes */
-    ArrayList <Player> playerList;
+    //ArrayList <Player> playerList;
     
     /*default constructor*/
     public Player (){
@@ -38,15 +38,15 @@ public class Player implements Serializable {
     }
     
     /* para arg: username of the current player */
-    public Player(String userName, int winDefault, int lossDefault)
-    {
-    
-    /*class global variable access the current username value*/
-    this.username = userName;
-    this.numberOfWins = winDefault;
-    this.numberOfLosses = lossDefault;
-    this.winLossRatio = 0;
-    }
+//    public Player(String userName, int winDefault, int lossDefault)
+//    {
+//    
+//    /*class global variable access the current username value*/
+//    this.username = userName;
+//    this.numberOfWins = winDefault;
+//    this.numberOfLosses = lossDefault;
+//    this.winLossRatio = 0;
+//    }
     
     public Player(String username)
     {
@@ -131,5 +131,10 @@ public class Player implements Serializable {
         {
             this.winLossRatio = numberOfWins;
         }
+    }
+    
+    public Position makeMove(byte [][] allSquares)
+    {
+        return null;
     }
 }

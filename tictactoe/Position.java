@@ -5,11 +5,13 @@
  */
 package tictactoe;
 
+import java.io.Serializable;
+
 /**
  *
  * @author lucy
  */
-public class Position {
+public class Position implements Serializable{
     private int x;
     private int y;
 

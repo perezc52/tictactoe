@@ -89,6 +89,7 @@ public class MainMenu extends Application {
         
         //deserialize a playerMap from computer or create it if it does not exist
         deserializePlayerMap();
+        playerMap.put("EasyComputer", new EasyPlayer("EasyComputer"));
         //System.out.println(playerMap.get("jojo").getNumberOfWins());
         
         //window.setTitle("Game");
@@ -103,6 +104,13 @@ public class MainMenu extends Application {
         //initializeHistoryScene();
         initializeDifficultyScene();
         //initializeBoardScene();
+        
+        //serialize on rude closing of program
+        window.setOnCloseRequest(e -> {
+            e.consume();
+            serializePlayerMap();
+            window.close();
+        });
         }
     
     
@@ -237,6 +245,14 @@ public class MainMenu extends Application {
             }
         }
         
+        if (players[currentTurn - 1] instanceof EasyPlayer)
+                {
+                    Position p = players[currentTurn - 1].makeMove(squares);
+                    tileHandler(p.getX(), p.getY(), turnLabel);
+                    //turnLabel.setText("It is " + players[currentTurn - 1].getUsername() + "'s turn");
+
+                }
+        
         mainMenuButton.setOnAction(e -> {
             if (BinaryQuestionBox.display("Wait", "Are you sure you want to return to the Main Menu? This will count as a loss to the current player's turn.") == true)
             {
@@ -261,7 +277,10 @@ public class MainMenu extends Application {
     
     //http://stackoverflow.com/questions/34189259/how-can-i-get-the-indexes-of-each-button-clicked-for-my-program
     private EventHandler<ActionEvent> createTileHandler(int row, int col, Label turnLabel) {
-        return event -> tileHandler(row, col, turnLabel);
+        return event -> {
+        tileHandler(row, col, turnLabel);
+        turnLabel.setText("It is " + players[currentTurn - 1].getUsername() + "'s turn");
+                };
     }
     private void tileHandler (int row, int col, Label turnLabel){
     
@@ -320,7 +339,12 @@ public class MainMenu extends Application {
                     currentTurn = 1;
                  
                 turnLabel.setText("It is " + players[currentTurn - 1].getUsername() + "'s turn");
-
+                
+                if (players[currentTurn - 1] instanceof EasyPlayer)
+                {
+                    Position p = players[currentTurn - 1].makeMove(squares);
+                    tileHandler(p.getX(), p.getY(), turnLabel);
+                }
             }
         } 
         else
@@ -485,6 +509,13 @@ public class MainMenu extends Application {
             //serializePlayerMap();
             initializeBoardScene();
             window.setScene(boardScene);
+//            if (players[currentTurn - 1] instanceof EasyPlayer)
+//                {
+//                    Position p = players[currentTurn - 1].makeMove(squares);
+//                    tileHandler(p.getX(), p.getY(), turnLabel);
+//                    //turnLabel.setText("It is " + players[currentTurn - 1].getUsername() + "'s turn");
+//
+//                }
         });
         quit.setOnAction(e -> {
             serializePlayerMap();
