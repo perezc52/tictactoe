@@ -11,9 +11,16 @@ import java.io.Serializable;
  *
  * @author lucy
  */
-public abstract class ComputerPlayer extends Player implements Serializable, Movable{
-    public ComputerPlayer(String username)
+public class MediumComputer extends ComputerPlayer implements Serializable, Movable{
+    public MediumComputer()
     {
-        super(username);
+        super("MediumComputer");
+        
+    }
+    
+    @Override
+    public Position makeMove(byte [][] allSquares)
+    {
+        return null;
     }
 }

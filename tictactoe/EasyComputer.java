@@ -5,6 +5,7 @@
  */
 package tictactoe;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 import javafx.scene.control.Button;
@@ -15,28 +16,20 @@ import static tictactoe.MainMenu.NUMBER_OF_ROWS;
  *
  * @author lucy
  */
-public class EasyPlayer extends Player{
+public class EasyComputer extends ComputerPlayer implements Serializable, Movable{
     private Random xy;
     //Random y;
     private ArrayList<Position> openSquares;
     
     
-    public EasyPlayer()
+    public EasyComputer()
     {
-        super();
+        super("EasyComputer");
         xy = new Random();
         openSquares = new ArrayList<>();
-        //y = new Random();
-        
-        
+        //y = new Random();   
     }
     
-    public EasyPlayer(String username)
-    {
-        super(username);
-        xy = new Random();
-        openSquares = new ArrayList<>();
-    }
     
     @Override
     public Position makeMove(byte [][] allSquares)

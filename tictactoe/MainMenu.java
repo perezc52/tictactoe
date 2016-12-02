@@ -89,7 +89,9 @@ public class MainMenu extends Application {
         
         //deserialize a playerMap from computer or create it if it does not exist
         deserializePlayerMap();
-        playerMap.put("EasyComputer", new EasyPlayer("EasyComputer"));
+        playerMap.put("EasyComputer", new EasyComputer());
+        playerMap.put("MediumComputer", new MediumComputer());
+        playerMap.put("HardComputer", new HardComputer());
         //System.out.println(playerMap.get("jojo").getNumberOfWins());
         
         //window.setTitle("Game");
@@ -245,7 +247,7 @@ public class MainMenu extends Application {
             }
         }
         
-        if (players[currentTurn - 1] instanceof EasyPlayer)
+        if (players[currentTurn - 1] instanceof ComputerPlayer)
                 {
                     Position p = players[currentTurn - 1].makeMove(squares);
                     tileHandler(p.getX(), p.getY(), turnLabel);
@@ -340,7 +342,7 @@ public class MainMenu extends Application {
                  
                 turnLabel.setText("It is " + players[currentTurn - 1].getUsername() + "'s turn");
                 
-                if (players[currentTurn - 1] instanceof EasyPlayer)
+                if (players[currentTurn - 1] instanceof ComputerPlayer)
                 {
                     Position p = players[currentTurn - 1].makeMove(squares);
                     tileHandler(p.getX(), p.getY(), turnLabel);
@@ -509,7 +511,7 @@ public class MainMenu extends Application {
             //serializePlayerMap();
             initializeBoardScene();
             window.setScene(boardScene);
-//            if (players[currentTurn - 1] instanceof EasyPlayer)
+//            if (players[currentTurn - 1] instanceof EasyComputer)
 //                {
 //                    Position p = players[currentTurn - 1].makeMove(squares);
 //                    tileHandler(p.getX(), p.getY(), turnLabel);
@@ -572,7 +574,9 @@ public class MainMenu extends Application {
             if (BinaryQuestionBox.display("Wait", "This will delete all player objects. Are you sure you wish to do this?") == true)
             {
                 playerMap.clear();
-                playerMap.put("EasyPlayer", new EasyPlayer("EasyComputer"));
+                playerMap.put("EasyComputer", new EasyComputer());
+                playerMap.put("MediumComputer", new MediumComputer());
+                playerMap.put("HardComputer", new HardComputer());
             }
                     });
         

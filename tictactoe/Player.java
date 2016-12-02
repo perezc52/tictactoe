@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author usha
  */
-public class Player implements Serializable {
+public class Player implements Serializable, Movable {
     /**
      * @param args the command line arguments
      */
