@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author usha
  */
-public class Player implements Serializable {
+public class Player implements Serializable, Movable {
     /**
      * @param args the command line arguments
      */
@@ -21,12 +21,13 @@ public class Player implements Serializable {
     private int numberOfLosses;
     private int numberOfWins;
     private double winLossRatio;
-    //private long serialVersionUID
+    //public static int guestNumber = 0;
+    private static final long serialVersionUID = 1L;
   //  image visualRepresentation;
     
     
     /* created player object classes */
-    ArrayList <Player> playerList;
+    //ArrayList <Player> playerList;
     
     /*default constructor*/
     public Player (){
@@ -38,15 +39,15 @@ public class Player implements Serializable {
     }
     
     /* para arg: username of the current player */
-    public Player(String userName, int winDefault, int lossDefault)
-    {
-    
-    /*class global variable access the current username value*/
-    this.username = userName;
-    this.numberOfWins = winDefault;
-    this.numberOfLosses = lossDefault;
-    this.winLossRatio = 0;
-    }
+//    public Player(String userName, int winDefault, int lossDefault)
+//    {
+//    
+//    /*class global variable access the current username value*/
+//    this.username = userName;
+//    this.numberOfWins = winDefault;
+//    this.numberOfLosses = lossDefault;
+//    this.winLossRatio = 0;
+//    }
     
     public Player(String username)
     {
@@ -131,5 +132,10 @@ public class Player implements Serializable {
         {
             this.winLossRatio = numberOfWins;
         }
+    }
+    
+    public Position makeMove(byte [][] allSquares)
+    {
+        return null;
     }
 }

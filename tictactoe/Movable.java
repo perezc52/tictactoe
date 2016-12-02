@@ -5,15 +5,12 @@
  */
 package tictactoe;
 
-import java.io.Serializable;
+import java.lang.reflect.Array;
 
 /**
  *
  * @author lucy
  */
-public abstract class ComputerPlayer extends Player implements Serializable, Movable{
-    public ComputerPlayer(String username)
-    {
-        super(username);
-    }
+public interface Movable {
+    public Position makeMove(byte [][] allSquares);
 }
