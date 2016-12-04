@@ -12,5 +12,5 @@ import java.lang.reflect.Array;
  * @author lucy
  */
 public interface Movable {
-    public Position makeMove(byte [][] allSquares);
+    public Position makeMove(byte [][] allSquares, byte [][] scores, byte playerNo);
 }

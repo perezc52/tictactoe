@@ -32,7 +32,7 @@ public class EasyComputer extends ComputerPlayer implements Serializable, Movabl
     
     
     @Override
-    public Position makeMove(byte [][] allSquares)
+    public Position makeMove(byte [][] allSquares, byte [][] scores, byte playerNo)
     {
         setOpenSquares(allSquares);
         Position pickedSquare = getOpenSquares().get(xy.nextInt(getOpenSquares().size()));
@@ -58,9 +58,9 @@ public class EasyComputer extends ComputerPlayer implements Serializable, Movabl
     public void setOpenSquares(byte [][] allSquares) {
         openSquares.clear();
         
-        for (int i = 0; i < NUMBER_OF_ROWS; i++)
+        for (byte i = 0; i < NUMBER_OF_ROWS; i++)
         {
-            for (int j = 0; j < NUMBER_OF_COLUMNS; j++)
+            for (byte j = 0; j < NUMBER_OF_COLUMNS; j++)
             {
                 if (allSquares[i][j] == 0)
                     openSquares.add(new Position(i, j));

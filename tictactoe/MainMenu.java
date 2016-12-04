@@ -47,13 +47,13 @@ public class MainMenu extends Application {
     private Stage window;
     
     //board variables
-    public static final int NUMBER_OF_ROWS = 5;
-    public static final int NUMBER_OF_COLUMNS = 5;
-    public static final int NUMBER_OF_SCORES = 2 * NUMBER_OF_ROWS + 2;
+    public static final byte NUMBER_OF_ROWS = 5;
+    public static final byte NUMBER_OF_COLUMNS = 5;
+    public static final byte NUMBER_OF_SCORES = 2 * NUMBER_OF_ROWS + 2;
     
     private byte currentTurn;
     private byte totalNumberOfTurns;
-    private int [][] scores; //0 forward 1 backward
+    private byte [][] scores; //0 forward 1 backward
     private byte [][] squares;
     private Button [][] gridButtons;
     
@@ -69,7 +69,7 @@ public class MainMenu extends Application {
         
 //        currentTurn = 1;
 //        totalNumberOfTurns = 0;
-        scores = new int[2][NUMBER_OF_SCORES];
+        scores = new byte[2][NUMBER_OF_SCORES];
         squares = new byte[NUMBER_OF_ROWS][NUMBER_OF_COLUMNS]; //java arrays are row major
         gridButtons = new Button[NUMBER_OF_ROWS][NUMBER_OF_COLUMNS];
         
@@ -248,12 +248,12 @@ public class MainMenu extends Application {
         }
         
         if (players[currentTurn - 1] instanceof ComputerPlayer)
-                {
-                    Position p = players[currentTurn - 1].makeMove(squares);
-                    tileHandler(p.getX(), p.getY(), turnLabel);
-                    //turnLabel.setText("It is " + players[currentTurn - 1].getUsername() + "'s turn");
+        {
+            Position p = players[currentTurn - 1].makeMove(squares, scores, currentTurn);
+            tileHandler(p.getX(), p.getY(), turnLabel);
+            //turnLabel.setText("It is " + players[currentTurn - 1].getUsername() + "'s turn");
 
-                }
+        }
         
         mainMenuButton.setOnAction(e -> {
             if (BinaryQuestionBox.display("Wait", "Are you sure you want to return to the Main Menu? This will count as a loss to the current player's turn.") == true)
@@ -344,7 +344,7 @@ public class MainMenu extends Application {
                 
                 if (players[currentTurn - 1] instanceof ComputerPlayer)
                 {
-                    Position p = players[currentTurn - 1].makeMove(squares);
+                    Position p = players[currentTurn - 1].makeMove(squares, scores, currentTurn);
                     tileHandler(p.getX(), p.getY(), turnLabel);
                 }
             }
