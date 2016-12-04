@@ -20,9 +20,13 @@ import javafx.event.EventHandler;
 import javafx.geometry.*;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 
@@ -55,7 +59,14 @@ public class MainMenu extends Application {
     private byte totalNumberOfTurns;
     private byte [][] scores; //0 forward 1 backward
     private byte [][] squares;
-    private Button [][] gridButtons;
+    private Canvas [][] gridButtons;
+    private GraphicsContext [][] gridContext;
+    
+    //private Canvas XCanvas;
+    //private Canvas YCanvas;
+    
+    private GraphicsContext XContext;
+    private GraphicsContext YContext;
     
     //Label turnLabel;
 
@@ -71,8 +82,10 @@ public class MainMenu extends Application {
 //        totalNumberOfTurns = 0;
         scores = new byte[2][NUMBER_OF_SCORES];
         squares = new byte[NUMBER_OF_ROWS][NUMBER_OF_COLUMNS]; //java arrays are row major
-        gridButtons = new Button[NUMBER_OF_ROWS][NUMBER_OF_COLUMNS];
-        
+        gridButtons = new Canvas[NUMBER_OF_ROWS][NUMBER_OF_COLUMNS];
+        gridContext = new GraphicsContext[NUMBER_OF_ROWS][NUMBER_OF_COLUMNS];
+        //gridButtons = new Canvas[NUMBER_OF_ROWS][NUMBER_OF_COLUMNS];
+        //gridButtons[i][j] = new Canvas(200,200);
         
 //        //initialize the score array
 //        initializeScoresArray();
@@ -171,9 +184,28 @@ public class MainMenu extends Application {
             for (int j = 0; j < NUMBER_OF_COLUMNS; j++)
             {
                 squares[i][j] = 0;
-                gridButtons[i][j] = new Button("R" + Integer.toString(i) + "C" + Integer.toString(j));
+                gridButtons[i][j] = new Canvas(50,50);
+                //gridButtons[i][j] = new Button("R" + Integer.toString(i) + "C" + Integer.toString(j));
+                gridContext[i][j] = gridButtons[i][j].getGraphicsContext2D();
+                //drawX(gridContext[i][j]);
             }
         }
+    }
+    
+    private void drawX(GraphicsContext gc)
+    {
+        gc.setStroke(Color.BLUE);
+        gc.setLineWidth(5);
+        gc.strokeLine(0, 0, 50, 50);
+        gc.strokeLine(50, 0, 0, 50);
+    }
+    
+    private void drawO(GraphicsContext gc)
+    {
+        gc.setStroke(Color.BLUE);
+        gc.setLineWidth(5);
+        //gc.stro
+        gc.strokeOval(5,5,40, 40);
     }
     
     public void initializeBoardScene()
@@ -199,6 +231,7 @@ public class MainMenu extends Application {
         gameGrid.setAlignment(Pos.CENTER);
         gameGrid.setHgap(10);
         gameGrid.setVgap(10);
+        gameGrid.setGridLinesVisible(true);
 
         for (int i = 0; i < NUMBER_OF_ROWS; i++)
         {
@@ -243,9 +276,15 @@ public class MainMenu extends Application {
         {
             for (int j = 0; j < NUMBER_OF_COLUMNS; j++)
             {
-                gridButtons[i][j].setOnAction(createTileHandler(i,j, turnLabel));
+                //gridButtons[i][j].setOnAction(createTileHandler(i,j, turnLabel));
+                gridButtons[i][j].setOnMouseClicked(createTileHandler(i, j, turnLabel));
+//                gridButtons[i][j].addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) ->  {
+//                    createTileHandler(i,j,turnLabel);
+//                });
             }
         }
+
+
         
         if (players[currentTurn - 1] instanceof ComputerPlayer)
         {
@@ -278,11 +317,16 @@ public class MainMenu extends Application {
     
     
     //http://stackoverflow.com/questions/34189259/how-can-i-get-the-indexes-of-each-button-clicked-for-my-program
-    private EventHandler<ActionEvent> createTileHandler(int row, int col, Label turnLabel) {
+    private EventHandler<MouseEvent> createTileHandler(int row, int col, Label turnLabel) {
+        
+        //MouseEvent event;
+        
         return event -> {
         tileHandler(row, col, turnLabel);
         turnLabel.setText("It is " + players[currentTurn - 1].getUsername() + "'s turn");
-                };
+        };
+        
+       //return event;
     }
     private void tileHandler (int row, int col, Label turnLabel){
     
@@ -294,7 +338,15 @@ public class MainMenu extends Application {
             squares[row][col] = currentTurn;
             
             //update visual representation
-            gridButtons[row][col].setText(Byte.toString(currentTurn));
+            if (currentTurn == 1)
+            {
+                drawX(gridContext[row][col]);
+            }
+            else
+            {
+                drawO(gridContext[row][col]);
+            }
+            
             
             //increment numberOfTurns (used for draw function)
             totalNumberOfTurns++;
@@ -415,19 +467,33 @@ public class MainMenu extends Application {
                 break;
         }
         
-        if ((row == NUMBER_OF_ROWS - 1) && (col == NUMBER_OF_ROWS - 1))
+        if ((row == NUMBER_OF_ROWS - 1) && (col == NUMBER_OF_ROWS - 1)) //bottom right
         {
             if (row == col)
                 scores[1][2 * NUMBER_OF_ROWS] += score;
             if (NUMBER_OF_ROWS - 1 - col == row)
                 scores[1][2 * NUMBER_OF_ROWS + 1] += score;
         }
-        else if ((row == 0) && (col == 0))
+        else if ((row == 0) && (col == 0)) //top left
         {
             if (row == col)
                 scores[0][2 * NUMBER_OF_ROWS] += score;
             if (NUMBER_OF_ROWS - 1 - col == row)
                 scores[0][2 * NUMBER_OF_ROWS + 1] += score;
+        }
+        else if (row == 0 && col == NUMBER_OF_COLUMNS - 1) //top right
+        {
+            if (row == col)
+                scores[0][2 * NUMBER_OF_ROWS] += score;
+            if (NUMBER_OF_ROWS - 1 - col == row)
+                scores[0][2 * NUMBER_OF_ROWS + 1] += score;
+        }
+        else if (row == NUMBER_OF_ROWS - 1 && col == 0) //bottom left
+        {
+            if (row == col)
+                scores[1][2 * NUMBER_OF_ROWS] += score;
+            if (NUMBER_OF_ROWS - 1 - col == row)
+                scores[1][2 * NUMBER_OF_ROWS + 1] += score;
         }
         else
         {
