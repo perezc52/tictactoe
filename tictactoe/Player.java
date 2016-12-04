@@ -134,7 +134,7 @@ public class Player implements Serializable, Movable {
         }
     }
     
-    public Position makeMove(byte [][] allSquares)
+    public Position makeMove(byte [][] allSquares, byte [][] scores, byte playerNo)
     {
         return null;
     }

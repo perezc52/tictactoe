@@ -15,6 +15,11 @@ public class Position implements Serializable{
     private int x;
     private int y;
 
+    public Position()
+    {
+        x = 0;
+        y = 0;
+    }
     
     public Position(int x, int y)
     {
