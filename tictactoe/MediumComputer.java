@@ -54,9 +54,9 @@ public static final int NUMBER_OF_SCORES = 2 * NUMBER_OF_ROWS + 2;
         else
             sign = -1;
         
-        for (int way = 0; way < 2; way++)
+        for (int way = 0; way < 2; way++) //0 forward 1 backward
         {
-            for (int rowType = 0; rowType < NUMBER_OF_ROWS * 2 + 2; rowType++)
+            for (int rowType = 0; rowType < NUMBER_OF_ROWS * 2 + 2; rowType++) //[row1, row2, row3, row4, row5 col1, col2, col3, col4, col5 diag1, diag2]
             {
                 if (scores[way][rowType] == 3 * (sign * -1)) //see enemy score
                 {
