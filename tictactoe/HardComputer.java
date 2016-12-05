@@ -55,7 +55,7 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
         
         for (int way = 0; way < 2; way++)
         {
-            for (int rowType = 0; rowType < NUMBER_OF_ROWS * 2 + 2; rowType++)
+            for (int rowType = 0; rowType < 12; rowType++)
             {
                 if (scores[way][rowType] == 3 * (sign * -1)) //see enemy score
                 {
@@ -322,7 +322,7 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
             setOpenSquares(allSquares);
             xy = new Random();
             //return openSquares.get(xy.nextInt(openSquares.size()));  
-            if (allSquares[2][2] != 0)
+            if (allSquares[2][2] == 0)
                 return new Position(2,2);
             else
                 return openSquares.get(xy.nextInt(openSquares.size()));

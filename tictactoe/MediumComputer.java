@@ -26,10 +26,10 @@ int currentPlayer;
 private int score[][];
 /*empty squares*/
 private ArrayList<Position> openSquares;
-public static final int NUMBER_OF_ROWS = 5;
-public static final int NUMBER_OF_COLUMNS = 5;
+//public static final int NUMBER_OF_ROWS = 5;
+//public static final int NUMBER_OF_COLUMNS = 5;
 /*score of total number of squares*/
-public static final int NUMBER_OF_SCORES = 2 * NUMBER_OF_ROWS + 2;
+//public static final int NUMBER_OF_SCORES = 2 * NUMBER_OF_ROWS + 2;
     
 /* player 1 or 2 as AI */
     public MediumComputer()
@@ -56,7 +56,7 @@ public static final int NUMBER_OF_SCORES = 2 * NUMBER_OF_ROWS + 2;
         
         for (int way = 0; way < 2; way++) //0 forward 1 backward
         {
-            for (int rowType = 0; rowType < NUMBER_OF_ROWS * 2 + 2; rowType++) //[row1, row2, row3, row4, row5 col1, col2, col3, col4, col5 diag1, diag2]
+            for (int rowType = 0; rowType < 12; rowType++) //[row1, row2, row3, row4, row5 col1, col2, col3, col4, col5 diag1, diag2]
             {
                 if (scores[way][rowType] == 3 * (sign * -1)) //see enemy score
                 {

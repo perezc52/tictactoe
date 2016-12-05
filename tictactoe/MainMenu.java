@@ -53,11 +53,11 @@ public class MainMenu extends Application {
     //board variables
     public static final byte NUMBER_OF_ROWS = 5;
     public static final byte NUMBER_OF_COLUMNS = 5;
-    public static final byte NUMBER_OF_SCORES = 2 * NUMBER_OF_ROWS + 2;
+    public static final byte NUMBER_OF_SCORES = 2 * NUMBER_OF_ROWS + 6;
     
     private byte currentTurn;
     private byte totalNumberOfTurns;
-    private byte [][] scores; //0 forward 1 backward
+    private byte [][] scores; //0 forward 1 backward count the mini diagionals 12-15 twice
     private byte [][] squares;
     private Canvas [][] gridButtons;
     private GraphicsContext [][] gridContext;
@@ -213,7 +213,7 @@ public class MainMenu extends Application {
         initializeBoardVariables();
         
         //Buttons
-        Button surrenderButton;
+        //Button surrenderButton;
         Button mainMenuButton;
         
         //Label
@@ -249,7 +249,7 @@ public class MainMenu extends Application {
 
         
         //initialize buttons
-        surrenderButton = new Button("Surrender");
+        //surrenderButton = new Button("Surrender");
         mainMenuButton = new Button("Return to Main Menu");
         
         //initialize hBox
@@ -258,7 +258,7 @@ public class MainMenu extends Application {
         hBox.setPadding(new Insets(10,10,10,10));
         //strangely you can't do this via borderPane
         hBox.setAlignment(Pos.CENTER);
-        hBox.getChildren().addAll(surrenderButton, mainMenuButton);
+        hBox.getChildren().addAll(mainMenuButton);
         
         //initialize border pane
         borderPane = new BorderPane();
@@ -440,6 +440,27 @@ public class MainMenu extends Application {
             score = -1;
         
         
+        if ((row == 4 && col == 1) || (row == 3 && col == 2) || (row == 2 && col == 3) || (row == 1 && col == 4)) //mini diagonal 12
+        {
+            scores[0][12] += score;
+            scores[1][12] += score;
+        }
+        if ((row == 4 && col == 3) || (row == 3 && col == 2) || (row == 2 && col == 1) || (row == 1 && col == 0) ) //mini diag bottom right tp left 
+        {
+            scores[0][13] += score;
+            scores[1][13] += score;
+        }
+        if ((row == 3 && col == 0) || (row == 2 && col == 1) || (row == 1 && col == 2) || (row == 0 && col == 3)) //top right bottom left
+        {
+            scores[0][14] += score;
+            scores[1][14] += score;
+        }
+        if ((row == 0 && col == 1) || (row == 1 && col == 2) || (row == 2 && col == 3) || (row == 3 && col == 4)) //top left bottom right
+        {
+            scores[0][15] += score;
+            scores[1][15] += score;
+        }
+        
         switch (col) {
             case NUMBER_OF_ROWS - 1:
                 scores[1][row] += score;
@@ -532,13 +553,13 @@ public class MainMenu extends Application {
 
         Label title = new Label("Tic-Tac-Toe");; 
         Button onePlayer, twoPlayers, viewHistory, quit;
-        onePlayer = new Button("1 Player");
+        //onePlayer = new Button("1 Player");
         twoPlayers = new Button("2 Players");
         viewHistory = new Button("View History");       
         quit = new Button("Quit");
         
         HBox bottom = new HBox(25);
-        bottom.getChildren().addAll(onePlayer, twoPlayers, viewHistory, quit);
+        bottom.getChildren().addAll(twoPlayers, viewHistory, quit);
         bottom.setAlignment(Pos.CENTER);
         bottom.setPadding(new Insets(10,10,50,10));
         
@@ -563,7 +584,7 @@ public class MainMenu extends Application {
             window.setScene(historyScene);
             //OpenHistoryMenu(window, historyScene);
         });
-        onePlayer.setOnAction(e -> window.setScene(poScene));
+        //onePlayer.setOnAction(e -> window.setScene(poScene));
         twoPlayers.setOnAction(e -> 
         {
             players[0] = OptionsMenu.display(playerMap, 1);
