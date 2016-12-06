@@ -55,9 +55,9 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
         
         for (int way = 0; way < 2; way++)
         {
-            for (int rowType = 0; rowType < 12; rowType++)
+            for (int rowType = 0; rowType < 16; rowType++)
             {
-                if (scores[way][rowType] == 3 * (sign * -1)) //see enemy score
+                if (scores[way][rowType] == 3 * (sign * -1) && bestScore < 3) //see enemy score
                 {
                     byte lowerBound;
                     byte upperBound;
@@ -102,14 +102,12 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
                         {
                             if (allSquares [i][i] == 0)
                             {
-                                {
-                                    bestScore = 3;
-                                    bestMove = new Position(i, i);
-                                }
+                                bestScore = 3;
+                                bestMove = new Position(i, i);
                             }
                         }
                     }
-                    else //top right to bottom left diagonal
+                    else if (rowType == 11) //top right to bottom left diagonal
                     {
                         for (int i = upperBound - 1; i > lowerBound - 1; i--)
                         {
@@ -120,8 +118,74 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
                             }
                         }
                     }
+                    else if (rowType == 12) //1
+                    {
+                        int row = 4;
+                        int col = 1;
+                        
+                        while (col < 5)
+                        {
+                            if (allSquares [row][col] == 0)
+                            {
+                                bestScore = 3;
+                                bestMove = new Position(row, col);
+                            }
+                            row--;
+                            col++;
+                        }
+                    }
+                    else if (rowType == 13) //2
+                    {
+                        int row = 4;
+                        int col = 3;
+                        
+                        while (col > -1)
+                        {
+                            if (allSquares [row][col] == 0)
+                            {
+                                bestScore = 3;
+                                bestMove = new Position(row, col);
+                            }
+                            row--;
+                            col--;
+                        }
+                    }
+                    else if (rowType == 14)//3
+                    {
+                        int row = 3;
+                        int col = 0;
+                        
+                        while (row > - 1)
+                        {
+                            if (allSquares [row][col] == 0)
+                            {
+                                bestScore = 3;
+                                bestMove = new Position(row, col);
+                            }
+                            row--;
+                            col++;
+                            
+                        }
+                    }
+                    else if (rowType == 15)//4
+                    {
+                        int row = 0;
+                        int col = 1;
+                        
+                        while (col < 5)
+                        {
+                            if (allSquares [row][col] == 0)
+                            {
+                                bestScore = 3;
+                                bestMove = new Position(row, col);
+                            }
+                            row++;
+                            col++;
+                            
+                        }
+                    }
                 }
-                else if (scores[way][rowType] == 3 * (sign)) //see your score
+                else if (scores[way][rowType] == 3 * (sign) && bestScore < 4) //see your score
                 {
                     byte lowerBound;
                     byte upperBound;
@@ -162,7 +226,7 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
                                 return new Position(i,i);
                         }
                     }
-                    else //top right to bottom left diagonal
+                    else if (rowType == 11) //top right to bottom left diagonal
                     {
                         for (int i = upperBound - 1; i > lowerBound - 1; i--)
                         {
@@ -170,8 +234,70 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
                                 return new Position(i,i);
                         }
                     }
+                    else if (rowType == 12)
+                    {
+                        int row = 4;
+                        int col = 1;
+                        
+                        while (col < 5)
+                        {
+                            if (allSquares [row][col] == 0)
+                            {
+                                return new Position(row, col); 
+                            }
+                            row--;
+                            col++;
+                        }
+                                
+                    }
+                    else if (rowType == 13)
+                    {
+                        int row = 4;
+                        int col = 3;
+                        
+                        while (col > -1)
+                        {
+                            if (allSquares [row][col] == 0)
+                            {
+                                 return new Position(row, col); 
+                            }
+                            row--;
+                            col--;
+                        }
+                    }
+                    else if (rowType == 14)
+                    {
+                        int row = 3;
+                        int col = 0;
+                        
+                        while (row > - 1)
+                        {
+                            if (allSquares [row][col] == 0)
+                            {
+                                 return new Position(row, col); 
+                            }
+                            row--;
+                            col++;
+                        }
+                    }
+                    else if (rowType == 15)
+                    {
+                        int row = 0;
+                        int col = 1;
+                        
+                        while (col < 5)
+                        {
+                            if (allSquares [row][col] == 0)
+                            {
+                                 return new Position(row, col); 
+                            }
+                            row++;
+                            col++;
+                        }
+                    }
+                    
                 }
-                else if ((scores[way][rowType] == 2 * (sign * -1)))
+                else if ((scores[way][rowType] == 2 * (sign * -1)) && bestScore < 2)
                 {
                     byte lowerBound;
                     byte upperBound;
@@ -184,13 +310,12 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
                         for (int col = lowerBound; col < upperBound; col++) //loop through game
                         {
                             if (allSquares[rowType][col] == 0)
-
-                                if (bestScore < 2)
-                                {
+                            {
+ 
                                     bestScore = 2;
                                     bestMove = new Position(rowType, col);
-                                }
                                 
+                            }
                         }
                     }
                     else if (rowType > 4 && rowType < 10)
@@ -199,11 +324,11 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
                         {
                             if (allSquares[row][rowType - 5] == 0)
                             {
-                                if (bestScore < 2)
-                                {
+
+
                                     bestScore = 2;
                                     bestMove = new Position(row, rowType - 5);
-                                }
+                               
                             }
                         }
                     }
@@ -213,30 +338,100 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
                         {
                             if (allSquares [i][i] == 0)
                             {
-                                if (bestScore < 2)
-                                {
+
                                     bestScore = 2;
                                     bestMove = new Position(i, i);
-                                }
+                                
                             }
                         }
                     }
-                    else //top right to bottom left diagonal
+                    else if (rowType == 11) //top right to bottom left diagonal
                     {
                         for (int i = upperBound - 1; i > lowerBound - 1; i--)
                         {
                             if (allSquares [i][i] == 0)
                             {
-                                if (bestScore < 2)
-                                {
+
                                     bestScore = 2;
                                     bestMove = new Position(i, i);
-                                }
+                                
                             }
                         }
                     }
+                    else if (rowType == 12)
+                    {
+                        int row = 4;
+                        int col = 1;
+                        
+                        while (col < 5)
+                        {
+                            if (allSquares [row][col] == 0)
+                            {
+
+                                    bestScore = 2;
+                                    bestMove = new Position(row, col);
+                                
+                            }
+                            row--;
+                            col++;
+                        }
+                    }
+                    else if (rowType == 13)
+                    {
+                        int row = 4;
+                        int col = 3;
+                        
+                        while (col > -1)
+                        {
+                            if (allSquares [row][col] == 0)
+                            {
+
+                                    bestScore = 2;
+                                    bestMove = new Position(row, col);
+                                
+                            }
+                            row--;
+                            col--;
+                        }
+                    }
+                    else if (rowType == 14)
+                    {
+                        int row = 3;
+                        int col = 0;
+                        
+                        while (row > - 1)
+                        {
+                            if (allSquares [row][col] == 0)
+                            {
+
+                                    bestScore = 2;
+                                    bestMove = new Position(row, col);
+                                
+                            }
+                            row--;
+                            col++;
+                        }
+                    }
+                    else if (rowType == 15)
+                    {
+                        int row = 0;
+                        int col = 1;
+                        
+                        while (col < 5)
+                        {
+                            if (allSquares [row][col] == 0)
+                            {
+
+                                    bestScore = 2;
+                                    bestMove = new Position(row, col);
+                                
+                            }
+                            row++;
+                            col++;
+                        }
+                    }
                 }
-                else if ((scores[way][rowType] == 1 * (sign * -1)))
+                else if ((scores[way][rowType] == 1 * (sign * -1)) && bestScore < 1)
                 {
                     //put it to the right
                     byte lowerBound;
@@ -262,11 +457,9 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
                         {
                             if (allSquares[bestRow][col] == 0)
                             {
-                                if (bestScore < 1)
-                                {
                                     bestScore = 1;
                                     bestMove = new Position(bestRow, col);
-                                }
+
                                 
                             }
                         }
@@ -277,11 +470,10 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
                         {
                             if (allSquares[row][bestRow - 5] == 0)
                             {
-                                if (bestScore < 1)
-                                {
+
                                     bestScore = 1;
                                     bestMove = new Position(row, bestRow - 5);
-                                }
+
                             }
                         }
                     }
@@ -291,26 +483,88 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
                         {
                             if (allSquares [i][i] == 0)
                             {
-                                if (bestScore < 1)
-                                {
                                     bestScore = 1;
                                     bestMove = new Position(i, i);
-                                }
                             }
                         }
                     }
-                    else //top right to bottom left diagonal
+                    else if (bestRow == 11) //top right to bottom left diagonal
                     {
                         for (int i = upperBound - 1; i > lowerBound - 1; i--)
                         {
                             if (allSquares [i][i] == 0)
                             {
-                                if (bestScore < 1)
-                                {
                                     bestScore = 1;
                                     bestMove = new Position(i, i);
-                                }
                             }
+                        }
+                    }
+                    else if (bestRow == 12)
+                    {
+                        int row = 4;
+                        int col = 1;
+                        
+                        while (col < 5)
+                        {
+                            if (allSquares [row][col] == 0)
+                            {
+                                    bestScore = 1;
+                                    bestMove = new Position(row, col);
+
+                                row--;
+                                col++;
+                            }
+                        }
+                                
+                    }
+                    else if (bestRow == 13)
+                    {
+                        int row = 4;
+                        int col = 3;
+                        
+                        while (col > -1)
+                        {
+                            if (allSquares [row][col] == 0)
+                            {
+
+                                bestScore = 1;
+                                bestMove = new Position(row, col);
+
+                            }
+                            row--;
+                            col--;
+                        }
+                    }
+                    else if (bestRow == 14)
+                    {
+                        int row = 3;
+                        int col = 0;
+                        
+                        while (row > - 1)
+                        {
+                            if (allSquares [row][col] == 0)
+                            {
+                                bestScore = 1;
+                                bestMove = new Position(row, col);
+                            }
+                            row--;
+                            col++;
+                        }
+                    }
+                    else if (bestRow == 15)
+                    {
+                        int row = 0;
+                        int col = 1;
+                        
+                        while (col < 5)
+                        {
+                            if (allSquares [row][col] == 0)
+                            {
+                                bestScore = 1;
+                                bestMove = new Position(row, col);
+                            }
+                            row++;
+                            col++;
                         }
                     }
                 }
@@ -323,12 +577,19 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
             xy = new Random();
             //return openSquares.get(xy.nextInt(openSquares.size()));  
             if (allSquares[2][2] == 0)
+            {
+                System.out.println(bestScore);
                 return new Position(2,2);
+            }
             else
-                return openSquares.get(xy.nextInt(openSquares.size()));
+            {
+                System.out.println(bestScore);
+                return openSquares.get(xy.nextInt(openSquares.size())); 
+            }
         }
         else
         {
+            System.out.println(bestScore);
             return bestMove;
         }
         
