@@ -402,7 +402,9 @@ public class MainMenu extends Application {
             }
         } 
         else
-            System.out.println("Square taken");
+        {
+            System.out.println("Square taken at (" + row + "," + col + ")");
+        }
     }
     
     private boolean checkForDraw()

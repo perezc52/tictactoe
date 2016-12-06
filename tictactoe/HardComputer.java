@@ -29,160 +29,88 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
     private ArrayList<Position> openSquares;
     private byte fakeTurn;
     private int numberOfOpenSquares;
+    Position bestMove;
 
     
     public HardComputer()
     {
         super("HardComputer");
         openSquares = new ArrayList<>();
+        bestMove = new Position();
     }
     
     @Override
     public Position makeMove(byte [][] allSquares, byte [][] scores, byte playerNo)
     {
+        bestMove = new Position();
         byte sign;
-        Position bestMove = new Position();
+        //Position bestMove = new Position();
         byte bestScore = 0;
         Random xy = new Random();
         
         //build your board if you dont have to block
-        
+        if (allSquares[2][2] == 0)
+        {
+            System.out.println("Middle picked" + bestScore);
+            return new Position(2,2);
+        }
         
         if (playerNo == 1)
             sign = 1;
         else
             sign = -1;
         
+        int lowerBound;
+        int upperBound;
+        
         for (int way = 0; way < 2; way++)
         {
+            lowerBound = way;
+            upperBound = way + 4;
+            
             for (int rowType = 0; rowType < 16; rowType++)
             {
                 if (scores[way][rowType] == 3 * (sign * -1) && bestScore < 3) //see enemy score
                 {
-                    byte lowerBound;
-                    byte upperBound;
-                    
-                    if (way == 0)
-                    {
-                        lowerBound = 0;
-                        upperBound = 4;
-                    }
-                    else
-                    {
-                        lowerBound = 1;
-                        upperBound = 5;
-                    }
-                    
-                    
                     if (rowType < 5) //horizontal
                     {
-                        for (int col = lowerBound; col < upperBound; col++) //loop through game
-                        {
-                            if (allSquares[rowType][col] == 0)
-                            {
-                                bestScore = 3;
-                                bestMove = new Position(rowType, col);
-                            }
-                        }
+                        if (checkHorizontalBestScore(allSquares, rowType, lowerBound, upperBound));
+                            bestScore = 3;  
                     }
                     else if (rowType > 4 && rowType < 10)
                     {
-                        for (int row = lowerBound; row < upperBound; row++) //loop through game
-                        {
-                            if (allSquares[row][rowType - 5] == 0)
-                            {
-                                bestScore = 3;
-                                bestMove = new Position(row, rowType - 5);
-                            }
-                        }
+                        if (checkVerticalBestScore(allSquares, rowType, lowerBound, upperBound));
+                            bestScore = 3;
                     }
                     else if (rowType == 10) //top left to bottom right diagonal
                     {
-                        for (int i = lowerBound; i < upperBound; i++)
-                        {
-                            if (allSquares [i][i] == 0)
-                            {
-                                bestScore = 3;
-                                bestMove = new Position(i, i);
-                            }
-                        }
+                        if (checkDiagonal1BestScore(allSquares, rowType, lowerBound, upperBound));
+                            bestScore = 3;
                     }
                     else if (rowType == 11) //top right to bottom left diagonal
                     {
-                        for (int i = upperBound - 1; i > lowerBound - 1; i--)
-                        {
-                            if (allSquares [i][i] == 0)
-                            {
-                                bestScore = 3;
-                                bestMove = new Position(i, i);
-                            }
-                        }
+                        if (checkDiagonal2BestScore(allSquares, rowType, lowerBound, upperBound));
+                            bestScore = 3;
                     }
                     else if (rowType == 12) //1
                     {
-                        int row = 4;
-                        int col = 1;
-                        
-                        while (col < 5)
-                        {
-                            if (allSquares [row][col] == 0)
-                            {
-                                bestScore = 3;
-                                bestMove = new Position(row, col);
-                            }
-                            row--;
-                            col++;
-                        }
+                        if(checkMiniDiagonal1BestScore(allSquares))
+                            bestScore = 3;
                     }
                     else if (rowType == 13) //2
                     {
-                        int row = 4;
-                        int col = 3;
-                        
-                        while (col > -1)
-                        {
-                            if (allSquares [row][col] == 0)
-                            {
-                                bestScore = 3;
-                                bestMove = new Position(row, col);
-                            }
-                            row--;
-                            col--;
-                        }
+                        if(checkMiniDiagonal2BestScore(allSquares))
+                            bestScore = 3;
                     }
                     else if (rowType == 14)//3
                     {
-                        int row = 3;
-                        int col = 0;
-                        
-                        while (row > - 1)
-                        {
-                            if (allSquares [row][col] == 0)
-                            {
-                                bestScore = 3;
-                                bestMove = new Position(row, col);
-                            }
-                            row--;
-                            col++;
-                            
-                        }
+                        if(checkMiniDiagonal3BestScore(allSquares))
+                            bestScore = 3;
                     }
                     else if (rowType == 15)//4
                     {
-                        int row = 0;
-                        int col = 1;
-                        
-                        while (col < 5)
-                        {
-                            if (allSquares [row][col] == 0)
-                            {
-                                bestScore = 3;
-                                bestMove = new Position(row, col);
-                            }
-                            row++;
-                            col++;
-                            
-                        }
+                        if(checkMiniDiagonal4BestScore(allSquares))
+                            bestScore = 3;
                     }
                     else
                     {
@@ -191,113 +119,45 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
                 }
                 else if (scores[way][rowType] == 3 * (sign) && bestScore < 4) //see your score
                 {
-                    byte lowerBound;
-                    byte upperBound;
-                    
-                    if (way == 0)
-                    {
-                        lowerBound = 0;
-                        upperBound = 4;
-                    }
-                    else
-                    {
-                        lowerBound = 1;
-                        upperBound = 5;
-                    }
-                    
-                    
                     if (rowType < 5) //horizontal
                     {
-                        for (int col = lowerBound; col < upperBound; col++) //loop through game
-                        {
-                            if (allSquares[rowType][col] == 0)
-                                return new Position(rowType, col);
-                        }
+                        if (checkHorizontalBestScore(allSquares, rowType, lowerBound, upperBound));
+                            return bestMove;
                     }
                     else if (rowType > 4 && rowType < 10)
                     {
-                        for (int row = lowerBound; row < upperBound; row++) //loop through game
-                        {
-                            if (allSquares[row][rowType - 5] == 0)
-                                return new Position(row, rowType - 5);
-                        }
+                        if (checkVerticalBestScore(allSquares, rowType, lowerBound, upperBound));
+                            return bestMove;
                     }
                     else if (rowType == 10) //top left to bottom right diagonal
                     {
-                        for (int i = lowerBound; i < upperBound; i++)
-                        {
-                            if (allSquares [i][i] == 0)
-                                return new Position(i,i);
-                        }
+                        if (checkDiagonal1BestScore(allSquares, rowType, lowerBound, upperBound));
+                            return bestMove;
                     }
                     else if (rowType == 11) //top right to bottom left diagonal
                     {
-                        for (int i = upperBound - 1; i > lowerBound - 1; i--)
-                        {
-                            if (allSquares [i][i] == 0)
-                                return new Position(i,i);
-                        }
+                        if (checkDiagonal2BestScore(allSquares, rowType, lowerBound, upperBound));
+                            return bestMove;
                     }
                     else if (rowType == 12)
                     {
-                        int row = 4;
-                        int col = 1;
-                        
-                        while (col < 5)
-                        {
-                            if (allSquares [row][col] == 0)
-                            {
-                                return new Position(row, col); 
-                            }
-                            row--;
-                            col++;
-                        }
-                                
+                        if(checkMiniDiagonal1BestScore(allSquares))
+                            return bestMove;                        
                     }
                     else if (rowType == 13)
                     {
-                        int row = 4;
-                        int col = 3;
-                        
-                        while (col > -1)
-                        {
-                            if (allSquares [row][col] == 0)
-                            {
-                                 return new Position(row, col); 
-                            }
-                            row--;
-                            col--;
-                        }
+                        if(checkMiniDiagonal2BestScore(allSquares))
+                            return bestMove; 
                     }
                     else if (rowType == 14)
                     {
-                        int row = 3;
-                        int col = 0;
-                        
-                        while (row > - 1)
-                        {
-                            if (allSquares [row][col] == 0)
-                            {
-                                 return new Position(row, col); 
-                            }
-                            row--;
-                            col++;
-                        }
+                        if(checkMiniDiagonal3BestScore(allSquares))
+                            return bestMove; 
                     }
                     else if (rowType == 15)
                     {
-                        int row = 0;
-                        int col = 1;
-                        
-                        while (col < 5)
-                        {
-                            if (allSquares [row][col] == 0)
-                            {
-                                 return new Position(row, col); 
-                            }
-                            row++;
-                            col++;
-                        }
+                        if(checkMiniDiagonal4BestScore(allSquares))
+                            return bestMove; 
                     }
                     else
                     {
@@ -307,136 +167,48 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
                 }
                 else if ((scores[way][rowType] == 2 * (sign * -1)) && bestScore < 2)
                 {
-                    byte lowerBound;
-                    byte upperBound;
-                    
-                    lowerBound = 1;
-                    upperBound = 4;
+                    //get best row to defend
+                    int bestRow = getBestRowToDefend(scores, playerNo, way);
 
                     if (rowType < 5) //horizontal
                     {
-                        for (int col = lowerBound; col < upperBound; col++) //loop through game
-                        {
-                            if (allSquares[rowType][col] == 0)
-                            {
- 
-                                    bestScore = 2;
-                                    bestMove = new Position(rowType, col);
-                                
-                            }
-                        }
+                        if (checkHorizontalBestScore(allSquares, rowType, lowerBound, upperBound));
+                            bestScore = 2;
                     }
                     else if (rowType > 4 && rowType < 10)
-                    {   
-                        for (int row = lowerBound; row < upperBound; row++) //loop through game
-                        {
-                            if (allSquares[row][rowType - 5] == 0)
-                            {
-
-
-                                    bestScore = 2;
-                                    bestMove = new Position(row, rowType - 5);
-                               
-                            }
-                        }
+                    {
+                        if (checkVerticalBestScore(allSquares, rowType, lowerBound, upperBound));
+                            bestScore = 2;
                     }
                     else if (rowType == 10) //top left to bottom right diagonal
                     {
-                        for (int i = lowerBound; i < upperBound; i++)
-                        {
-                            if (allSquares [i][i] == 0)
-                            {
-
-                                    bestScore = 2;
-                                    bestMove = new Position(i, i);
-                                
-                            }
-                        }
+                        if (checkDiagonal1BestScore(allSquares, rowType, lowerBound, upperBound));
+                            bestScore = 2;
                     }
                     else if (rowType == 11) //top right to bottom left diagonal
                     {
-                        for (int i = upperBound - 1; i > lowerBound - 1; i--)
-                        {
-                            if (allSquares [i][i] == 0)
-                            {
-
-                                    bestScore = 2;
-                                    bestMove = new Position(i, i);
-                                
-                            }
-                        }
+                        if (checkDiagonal2BestScore(allSquares, rowType, lowerBound, upperBound));
+                            bestScore = 2;
                     }
                     else if (rowType == 12)
                     {
-                        int row = 4;
-                        int col = 1;
-                        
-                        while (col < 5)
-                        {
-                            if (allSquares [row][col] == 0)
-                            {
-
-                                    bestScore = 2;
-                                    bestMove = new Position(row, col);
-                                
-                            }
-                            row--;
-                            col++;
-                        }
+                        if(checkMiniDiagonal1BestScore(allSquares))
+                            bestScore = 2;                      
                     }
                     else if (rowType == 13)
                     {
-                        int row = 4;
-                        int col = 3;
-                        
-                        while (col > -1)
-                        {
-                            if (allSquares [row][col] == 0)
-                            {
-
-                                    bestScore = 2;
-                                    bestMove = new Position(row, col);
-                                
-                            }
-                            row--;
-                            col--;
-                        }
+                        if(checkMiniDiagonal2BestScore(allSquares))
+                            bestScore = 2;
                     }
                     else if (rowType == 14)
                     {
-                        int row = 3;
-                        int col = 0;
-                        
-                        while (row > - 1)
-                        {
-                            if (allSquares [row][col] == 0)
-                            {
-
-                                    bestScore = 2;
-                                    bestMove = new Position(row, col);
-                                
-                            }
-                            row--;
-                            col++;
-                        }
+                        if(checkMiniDiagonal3BestScore(allSquares))
+                            bestScore = 2; 
                     }
                     else if (rowType == 15)
                     {
-                        int row = 0;
-                        int col = 1;
-                        
-                        while (col < 5)
-                        {
-                            if (allSquares [row][col] == 0)
-                            {
-
-                                    bestScore = 2;
-                                    bestMove = new Position(row, col);
-                                
-                            }
-                            row++;
-                            col++;
-                        }
+                        if(checkMiniDiagonal4BestScore(allSquares))
+                            bestScore = 2; 
                     }
                     else
                     {
@@ -445,139 +217,48 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
                 }
                 else if ((scores[way][rowType] == 1 * (sign * -1)) && bestScore < 1)
                 {
-                    //put it to the right
-                    byte lowerBound;
-                    byte upperBound;
-                    
-                    if (way == 0)
-                    {
-                        lowerBound = 0;
-                        upperBound = 4;
-                    }
-                    else
-                    {
-                        lowerBound = 1;
-                        upperBound = 5;
-                    }
-                    
                     //get best row to defend
                     int bestRow = getBestRowToDefend(scores, playerNo, way);
 
-                    if (bestRow < 5) //horizontal
+                    if (rowType < 5) //horizontal
                     {
-                        for (int col = lowerBound; col < upperBound; col++) //loop through game
-                        {
-                            if (allSquares[bestRow][col] == 0)
-                            {
-                                    bestScore = 1;
-                                    bestMove = new Position(bestRow, col);
-
-                                
-                            }
-                        }
+                        if (checkHorizontalBestScore(allSquares, rowType, lowerBound, upperBound));
+                            bestScore = 1;
                     }
-                    else if (bestRow > 4 && bestRow < 10)
-                    {   
-                        for (int row = lowerBound; row < upperBound; row++) //loop through game
-                        {
-                            if (allSquares[row][bestRow - 5] == 0)
-                            {
-
-                                    bestScore = 1;
-                                    bestMove = new Position(row, bestRow - 5);
-
-                            }
-                        }
-                    }
-                    else if (bestRow == 10) //top left to bottom right diagonal
+                    else if (rowType > 4 && rowType < 10)
                     {
-                        for (int i = lowerBound; i < upperBound; i++)
-                        {
-                            if (allSquares [i][i] == 0)
-                            {
-                                    bestScore = 1;
-                                    bestMove = new Position(i, i);
-                            }
-                        }
+                        if (checkVerticalBestScore(allSquares, rowType, lowerBound, upperBound));
+                            bestScore = 1;
                     }
-                    else if (bestRow == 11) //top right to bottom left diagonal
+                    else if (rowType == 10) //top left to bottom right diagonal
                     {
-                        for (int i = upperBound - 1; i > lowerBound - 1; i--)
-                        {
-                            if (allSquares [i][i] == 0)
-                            {
-                                    bestScore = 1;
-                                    bestMove = new Position(i, i);
-                            }
-                        }
+                        if (checkDiagonal1BestScore(allSquares, rowType, lowerBound, upperBound));
+                            bestScore = 1;
                     }
-                    else if (bestRow == 12)
+                    else if (rowType == 11) //top right to bottom left diagonal
                     {
-                        int row = 4;
-                        int col = 1;
-                        
-                        while (col < 5)
-                        {
-                            if (allSquares [row][col] == 0)
-                            {
-                                    bestScore = 1;
-                                    bestMove = new Position(row, col);
-
-                                row--;
-                                col++;
-                            }
-                        }
-                                
+                        if (checkDiagonal2BestScore(allSquares, rowType, lowerBound, upperBound));
+                            bestScore = 1;
                     }
-                    else if (bestRow == 13)
+                    else if (rowType == 12)
                     {
-                        int row = 4;
-                        int col = 3;
-                        
-                        while (col > -1)
-                        {
-                            if (allSquares [row][col] == 0)
-                            {
-
-                                bestScore = 1;
-                                bestMove = new Position(row, col);
-
-                            }
-                            row--;
-                            col--;
-                        }
+                        if(checkMiniDiagonal1BestScore(allSquares))
+                            bestScore = 1;                      
                     }
-                    else if (bestRow == 14)
+                    else if (rowType == 13)
                     {
-                        int row = 3;
-                        int col = 0;
-                        
-                        while (row > - 1)
-                        {
-                            if (allSquares [row][col] == 0)
-                            {
-                                bestScore = 1;
-                                bestMove = new Position(row, col);
-                            }
-                            row--;
-                            col++;
-                        }
+                        if(checkMiniDiagonal2BestScore(allSquares))
+                            bestScore = 1;
                     }
-                    else if (bestRow == 15)
+                    else if (rowType == 14)
                     {
-                        int row = 0;
-                        int col = 1;
-                        
-                        while (col < 5)
-                        {
-                            if (allSquares [row][col] == 0)
-                            {
-                                bestScore = 1;
-                                bestMove = new Position(row, col);
-                            }
-                            row++;
-                            col++;
-                        }
+                        if(checkMiniDiagonal3BestScore(allSquares))
+                            bestScore = 1; 
+                    }
+                    else if (rowType == 15)
+                    {
+                        if(checkMiniDiagonal4BestScore(allSquares))
+                            bestScore = 1; 
                     }
                     else
                     {
@@ -592,16 +273,8 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
             setOpenSquares(allSquares);
             xy = new Random();
             //return openSquares.get(xy.nextInt(openSquares.size()));  
-            if (allSquares[2][2] == 0)
-            {
-                System.out.println("Middle picked" + bestScore);
-                return new Position(2,2);
-            }
-            else
-            {
-                System.out.println("Random picked" + bestScore);
-                return openSquares.get(xy.nextInt(openSquares.size())); 
-            }
+            System.out.println("Random picked" + bestScore);
+            return openSquares.get(xy.nextInt(openSquares.size()));
         }
         else
         {
@@ -751,4 +424,148 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
 
         return bestType;
     }
+    
+    private boolean checkHorizontalBestScore(byte [][] allSquares, int rowType, int lowerBound, int upperBound)
+    {
+        boolean found = false;
+        
+        for (int col = lowerBound; col < upperBound; col++) //loop through game
+        {
+            if (allSquares[rowType][col] == 0)
+            {
+                bestMove = new Position(rowType, col);
+                found = true;
+            }
+        }
+        
+        return found;
+    }
+    private boolean checkVerticalBestScore(byte [][] allSquares, int rowType, int lowerBound, int upperBound)
+    {
+        boolean found = false;
+        
+        for (int row = lowerBound; row < upperBound; row++) //loop through game
+        {
+            if (allSquares[row][rowType - 5] == 0)
+            {
+                bestMove = new Position(row, rowType - 5);
+                found = true;
+            }
+        }
+        
+        return found;
+    }
+    private boolean checkDiagonal1BestScore(byte [][] allSquares, int rowType, int lowerBound, int upperBound)
+    {
+        boolean found = false;
+        
+        for (int i = lowerBound; i < upperBound; i++)
+        {
+            if (allSquares [i][i] == 0)
+            {
+                bestMove = new Position(i, i);
+                found = true;
+            }
+        }
+        
+        return found;
+    }
+     private boolean checkDiagonal2BestScore(byte [][] allSquares, int rowType, int lowerBound, int upperBound)
+    {
+        boolean found = false;
+        
+        for (int i = upperBound - 1; i > lowerBound - 1; i--)
+        {
+            if (allSquares [i][i] == 0)
+            {
+                bestMove = new Position(i, i);
+                found = true;
+            }
+        }
+        
+        return found;
+    }
+    private boolean checkMiniDiagonal1BestScore(byte [][] allSquares)
+    {
+        boolean found = false;
+        
+        int row = 4;
+        int col = 1;
+
+        while (col < 5)
+        {
+            if (allSquares [row][col] == 0)
+            {
+                bestMove = new Position(row, col);
+                found = true;
+            }
+            row--;
+            col++;
+        }
+        
+        return found;
+    }
+    private boolean checkMiniDiagonal2BestScore(byte [][] allSquares)
+    {
+        boolean found = false;
+        
+        int row = 4;
+        int col = 3;
+
+        while (col > -1)
+        {
+            if (allSquares [row][col] == 0)
+            {
+                bestMove = new Position(row, col);
+                found = true;
+            }
+            row--;
+            col--;
+        }
+        
+        return found;
+    }
+    
+    private boolean checkMiniDiagonal3BestScore(byte [][] allSquares)
+    {
+        boolean found = false;
+        
+        int row = 3;
+        int col = 0;
+
+        while (row > - 1)
+        {
+            if (allSquares [row][col] == 0)
+            {
+                bestMove = new Position(row, col);
+                found = true;
+            }
+            row--;
+            col++;
+        }
+        
+        return found;
+    }
+    private boolean checkMiniDiagonal4BestScore(byte [][] allSquares)
+    {
+        boolean found = false;
+        
+        int row = 0;
+        int col = 1;
+
+        while (col < 5)
+        {
+            if (allSquares [row][col] == 0)
+            {
+                bestMove = new Position(row, col);
+                found = true;
+            }
+            row++;
+            col++;
+
+        }
+        
+        return found;
+    }
+    
 }
