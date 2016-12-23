@@ -74,43 +74,43 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
                 {
                     if (rowType < 5) //horizontal
                     {
-                        if (checkHorizontalBestScore(allSquares, rowType, lowerBound, upperBound));
-                            bestScore = 3;  
+                        if (checkHorizontalBestScore(allSquares, rowType, lowerBound, upperBound))
+                        {bestScore = 3; } 
                     }
                     else if (rowType > 4 && rowType < 10)
                     {
-                        if (checkVerticalBestScore(allSquares, rowType, lowerBound, upperBound));
-                            bestScore = 3;
+                        if (checkVerticalBestScore(allSquares, rowType, lowerBound, upperBound))
+                        { bestScore = 3;}
                     }
                     else if (rowType == 10) //top left to bottom right diagonal
                     {
-                        if (checkDiagonal1BestScore(allSquares, rowType, lowerBound, upperBound));
-                            bestScore = 3;
+                        if (checkDiagonal1BestScore(allSquares, rowType, lowerBound, upperBound))
+                        { bestScore = 3;}
                     }
                     else if (rowType == 11) //top right to bottom left diagonal
                     {
-                        if (checkDiagonal2BestScore(allSquares, rowType, lowerBound, upperBound));
+                        if (checkDiagonal2BestScore(allSquares, rowType, lowerBound, upperBound))
                             bestScore = 3;
                     }
                     else if (rowType == 12) //1
                     {
                         if(checkMiniDiagonal1BestScore(allSquares))
-                            bestScore = 3;
+                        {bestScore = 3;}
                     }
                     else if (rowType == 13) //2
                     {
                         if(checkMiniDiagonal2BestScore(allSquares))
-                            bestScore = 3;
+                        {bestScore = 3;}
                     }
                     else if (rowType == 14)//3
                     {
                         if(checkMiniDiagonal3BestScore(allSquares))
-                            bestScore = 3;
+                        { bestScore = 3;}
                     }
                     else if (rowType == 15)//4
                     {
                         if(checkMiniDiagonal4BestScore(allSquares))
-                            bestScore = 3;
+                        {bestScore = 3;}
                     }
                     else
                     {
@@ -121,22 +121,22 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
                 {
                     if (rowType < 5) //horizontal
                     {
-                        if (checkHorizontalBestScore(allSquares, rowType, lowerBound, upperBound));
+                        if (checkHorizontalBestScore(allSquares, rowType, lowerBound, upperBound))
                             return bestMove;
                     }
                     else if (rowType > 4 && rowType < 10)
                     {
-                        if (checkVerticalBestScore(allSquares, rowType, lowerBound, upperBound));
+                        if (checkVerticalBestScore(allSquares, rowType, lowerBound, upperBound))
                             return bestMove;
                     }
                     else if (rowType == 10) //top left to bottom right diagonal
                     {
-                        if (checkDiagonal1BestScore(allSquares, rowType, lowerBound, upperBound));
+                        if (checkDiagonal1BestScore(allSquares, rowType, lowerBound, upperBound))
                             return bestMove;
                     }
                     else if (rowType == 11) //top right to bottom left diagonal
                     {
-                        if (checkDiagonal2BestScore(allSquares, rowType, lowerBound, upperBound));
+                        if (checkDiagonal2BestScore(allSquares, rowType, lowerBound, upperBound))
                             return bestMove;
                     }
                     else if (rowType == 12)
@@ -170,45 +170,45 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
                     //get best row to defend
                     int bestRow = getBestRowToDefend(scores, playerNo, way);
 
-                    if (rowType < 5) //horizontal
+                    if (bestRow < 5) //horizontal
                     {
-                        if (checkHorizontalBestScore(allSquares, rowType, lowerBound, upperBound));
-                            bestScore = 2;
+                        if (checkHorizontalBestScore(allSquares, bestRow, lowerBound, upperBound))
+                        {bestScore = 2;}
                     }
-                    else if (rowType > 4 && rowType < 10)
+                    else if (bestRow > 4 && bestRow < 10)
                     {
-                        if (checkVerticalBestScore(allSquares, rowType, lowerBound, upperBound));
-                            bestScore = 2;
+                        if (checkVerticalBestScore(allSquares, bestRow, lowerBound, upperBound))
+                        {bestScore = 2;}
                     }
-                    else if (rowType == 10) //top left to bottom right diagonal
+                    else if (bestRow == 10) //top left to bottom right diagonal
                     {
-                        if (checkDiagonal1BestScore(allSquares, rowType, lowerBound, upperBound));
-                            bestScore = 2;
+                        if (checkDiagonal1BestScore(allSquares, bestRow, lowerBound, upperBound))
+                        {bestScore = 2;}
                     }
-                    else if (rowType == 11) //top right to bottom left diagonal
+                    else if (bestRow == 11) //top right to bottom left diagonal
                     {
-                        if (checkDiagonal2BestScore(allSquares, rowType, lowerBound, upperBound));
-                            bestScore = 2;
+                        if (checkDiagonal2BestScore(allSquares, bestRow, lowerBound, upperBound))
+                        {bestScore = 2;}
                     }
-                    else if (rowType == 12)
+                    else if (bestRow == 12)
                     {
                         if(checkMiniDiagonal1BestScore(allSquares))
                             bestScore = 2;                      
                     }
-                    else if (rowType == 13)
+                    else if (bestRow == 13)
                     {
                         if(checkMiniDiagonal2BestScore(allSquares))
-                            bestScore = 2;
+                        {bestScore = 2;}
                     }
-                    else if (rowType == 14)
+                    else if (bestRow == 14)
                     {
                         if(checkMiniDiagonal3BestScore(allSquares))
-                            bestScore = 2; 
+                        {bestScore = 2; }
                     }
-                    else if (rowType == 15)
+                    else if (bestRow == 15)
                     {
                         if(checkMiniDiagonal4BestScore(allSquares))
-                            bestScore = 2; 
+                        { bestScore = 2; }
                     }
                     else
                     {
@@ -218,47 +218,47 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
                 else if ((scores[way][rowType] == 1 * (sign * -1)) && bestScore < 1)
                 {
                     //get best row to defend
-                    int bestRow = getBestRowToDefend(scores, playerNo, way);
+                    int bestRow = getBestRowToDefend(scores, playerNo, way); //this only goes for one way... not good
 
-                    if (rowType < 5) //horizontal
+                    if (bestRow < 5) //horizontal
                     {
-                        if (checkHorizontalBestScore(allSquares, rowType, lowerBound, upperBound));
-                            bestScore = 1;
+                        if (checkHorizontalBestScore(allSquares, bestRow, lowerBound, upperBound))
+                        {bestScore = 1;}
                     }
-                    else if (rowType > 4 && rowType < 10)
+                    else if (bestRow > 4 && bestRow < 10)
                     {
-                        if (checkVerticalBestScore(allSquares, rowType, lowerBound, upperBound));
-                            bestScore = 1;
+                        if (checkVerticalBestScore(allSquares, bestRow, lowerBound, upperBound))
+                        {bestScore = 1;}
                     }
-                    else if (rowType == 10) //top left to bottom right diagonal
+                    else if (bestRow == 10) //top left to bottom right diagonal
                     {
-                        if (checkDiagonal1BestScore(allSquares, rowType, lowerBound, upperBound));
-                            bestScore = 1;
+                        if (checkDiagonal1BestScore(allSquares, bestRow, lowerBound, upperBound))
+                        {bestScore = 1;}
                     }
-                    else if (rowType == 11) //top right to bottom left diagonal
+                    else if (bestRow == 11) //top right to bottom left diagonal
                     {
-                        if (checkDiagonal2BestScore(allSquares, rowType, lowerBound, upperBound));
-                            bestScore = 1;
+                        if (checkDiagonal2BestScore(allSquares, bestRow, lowerBound, upperBound))
+                        {bestScore = 1;}
                     }
-                    else if (rowType == 12)
+                    else if (bestRow == 12)
                     {
                         if(checkMiniDiagonal1BestScore(allSquares))
-                            bestScore = 1;                      
+                        {bestScore = 1;    }                  
                     }
-                    else if (rowType == 13)
+                    else if (bestRow == 13)
                     {
                         if(checkMiniDiagonal2BestScore(allSquares))
-                            bestScore = 1;
+                        {bestScore = 1;}
                     }
-                    else if (rowType == 14)
+                    else if (bestRow == 14)
                     {
                         if(checkMiniDiagonal3BestScore(allSquares))
-                            bestScore = 1; 
+                        {bestScore = 1; }
                     }
-                    else if (rowType == 15)
+                    else if (bestRow == 15)
                     {
                         if(checkMiniDiagonal4BestScore(allSquares))
-                            bestScore = 1; 
+                        {bestScore = 1; }
                     }
                     else
                     {
@@ -274,13 +274,12 @@ public class HardComputer extends ComputerPlayer implements Serializable, Movabl
             xy = new Random();
             //return openSquares.get(xy.nextInt(openSquares.size()));  
             System.out.println("Random picked" + bestScore);
-            return openSquares.get(xy.nextInt(openSquares.size()));
+            bestMove = openSquares.get(xy.nextInt(openSquares.size()));
         }
-        else
-        {
-            System.out.println(bestScore);
-            return bestMove;
-        }
+
+        System.out.println(bestScore);
+        return bestMove;
+
         
     }
     
